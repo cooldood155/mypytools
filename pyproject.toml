@@ -3,7 +3,7 @@ requires = ["setuptools>=82", "setuptools-scm>=9"]
 build-backend = "setuptools.build_meta"
 
 
-#--{ Project }-----------------------------------------------------------------
+#——{ Project }—————————————————————————————————————————————————————————————————
 
 [project]
 name = "mytools"
@@ -19,7 +19,7 @@ license = {text = "MIT"}
 dev = ["pytest>=7.0", "mypy>=1.0", "ruff>=0.1"]
 
 
-#--{ Setuptools-Package(s) }---------------------------------------------------
+#——{ Setuptools-Package(s) }———————————————————————————————————————————————————
 
 [tool.setuptools]
 package-dir = {"" = "src"}
@@ -34,29 +34,75 @@ mytools = ["py.typed"]
 [tool.setuptools_scm]
 
 
-#--{ Pytest }------------------------------------------------------------------
+#——{ Pytest }——————————————————————————————————————————————————————————————————
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
-#--{ Mypy }--------------------------------------------------------------------
+#——{ Mypy }————————————————————————————————————————————————————————————————————
 
 [tool.mypy]
 python_version = "3.12"
 strict = true
 
-#--{ Ruff }--------------------------------------------------------------------
+#——{ Ruff }————————————————————————————————————————————————————————————————————
 
 [tool.ruff]
 line-length = 80
+target-version = "py311" # <-- Tells pyupgrade which version of Python features it can force
 
 extend-exclude = ["tests"]
 force-exclude = true
 
-
+#——{ Formatting }——————————————————————
 [tool.ruff.format]
 quote-style = "single"
 indent-style = "tab"
+line-ending = "lf"
 
 docstring-code-format = true
-docstring-code-line-length = 35
+docstring-code-line-length = "dynamic"
+
+#——{ Linting & Rules}——————————————————
+[tool.ruff.lint]
+task-tags = ["TODO", "FIXME"]
+
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings (Enables W505 max-doc-length rule)
+    "F",    # Pyflakes (basic syntax & variable errors)
+    "I",    # isort (automatic import sorting)
+    "B",    # flake8-bugbear (catches subtle design bugs and logic flaws)
+    "N",    # pep8-naming (enforces camelCase for classes, snake_case for functions)
+    "UP",   # pyupgrade (forces modern Python syntax upgrades automatically)
+    "D",    # pydocstyle (STRICT docstring style checking)
+    "SIM",  # flake8-simplify (suggests simpler, cleaner wys to write logic)
+    "C4",   # flake8-comprehensions (optimizes dict/list/set comprehensions)
+    "RUF",  # Ruff-specific rules
+]
+
+
+[tool.ruff.lint.pycodestyle]
+ignore-overlong-task-comments = true
+max-doc-length = 80
+
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+
+[tool.ruff.lint.isort]
+force-wrap-aliases = true
+combine-as-imports = true
+split-on-trailing-comma = false
+
+known-first-party = ["mytools"]
+known-local-folder = ["src"]
+
+
+[tool.ruff.lint.isort.import-heading]
+future = "Future imports"
+standard-library = "Standard library imports"
+third-party = "Third party imports"
+first-party = "Project imports"
+local-folder = "Relative imports"

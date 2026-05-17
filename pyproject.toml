@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=82", "setuptools-scm>=9"]
 build-backend = "setuptools.build_meta"
 
 
@@ -7,6 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mytools"
+dependencies = []
 dynamic = ["version"]
 description = "Collection of utility tools"
 readme = "README.md"
@@ -15,7 +16,7 @@ authors = [{name = "Evan Reumann", email = "evanrileyreumann@gmail.com"}]
 license = {text = "MIT"}
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "mypy>=1.0", "black>=23.0", "ruff>=0.1"]
+dev = ["pytest>=7.0", "mypy>=1.0", "ruff>=0.1"]
 
 
 #--{ Setuptools-Package(s) }---------------------------------------------------
@@ -28,6 +29,9 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 mytools = ["py.typed"]
+
+
+[tool.setuptools_scm]
 
 
 #--{ Pytest }------------------------------------------------------------------
@@ -45,3 +49,14 @@ strict = true
 
 [tool.ruff]
 line-length = 80
+
+extend-exclude = ["tests"]
+force-exclude = true
+
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "tab"
+
+docstring-code-format = true
+docstring-code-line-length = 35

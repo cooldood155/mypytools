@@ -19,7 +19,7 @@ jobs:
             - name: Install dependencies
               run: pip install -e ".[dev]"
 
-            - name: Line (ruff)
+            - name: Format check (ruff)
               run: ruff check src/
 
             - name: Type check (mypy)

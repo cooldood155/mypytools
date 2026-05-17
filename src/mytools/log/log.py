@@ -1,5 +1,6 @@
 import sys
 from traceback import extract_tb
+from types import TracebackType
 from logging import DEBUG, Logger, getLogger, FileHandler, Formatter
 from pathlib import Path
 from mytools.ansi_tools.formatter import StyleBuilder
@@ -34,7 +35,11 @@ def setup_hooks() -> None:
 	"""Call this in your project to install the custom excepthook."""
 
 	# --{ Exception-Hook }---------
-	def custom_excepthook(exc_type, exc_value, exc_tb) -> None:
+	def custom_excepthook(
+		exc_type: type[BaseException],
+		exc_value: BaseException,
+		exc_tb: TracebackType | None,
+	) -> None:
 		# -- Header --
 		header = (
 			StyleBuilder()

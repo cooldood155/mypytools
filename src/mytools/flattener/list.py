@@ -2,6 +2,7 @@ from typing import Any, cast, TypeVar, overload
 from collections.abc import Iterable
 
 TC = TypeVar('TC')
+ET = TypeVar('ET')
 
 
 @overload
@@ -14,9 +15,6 @@ def to_list(
 	preserve_dict_tuples: bool = True,
 	cast_to: type[TC],
 ) -> list[TC]: ...
-
-
-ET = TypeVar('ET')
 
 
 @overload
@@ -180,7 +178,7 @@ def to_list(
 
 			is_items = unwrap_dict_keys and unwrap_dict_vals
 			if is_items:
-				target_iterable = entry.items()
+				target_iterable: Iterable[Any] = entry.items()
 			elif unwrap_dict_keys:
 				target_iterable = entry.keys()
 			else:
@@ -221,11 +219,5 @@ def to_list(
 		return flat_result
 	elif cast_to is not None:
 		return cast(list[TC], flat_result)
-
-	first_type = type(flat_result[0])
-	all_same_type = all(type(item) is first_type for item in flat_result)
-
-	if all_same_type:
-		return cast(Any, flat_result)
 
 	return flat_result

@@ -34,7 +34,7 @@ def setup_hooks() -> None:
 	"""Call this in your project to install the custom excepthook."""
 
 	# --{ Exception-Hook }---------
-	def custom_excepthook(exc_type, exc_value, exc_tb):
+	def custom_excepthook(exc_type, exc_value, exc_tb) -> None:
 		# -- Header --
 		header = (
 			StyleBuilder()

@@ -1,34 +1,36 @@
 """Tests for src/mytools/ansi_tools/formatter.py"""
 
+# Third party imports
 import pytest
 
-from mytools.ansi_tools.formatter import ANSIFormatter, StyleBuilder, bubble
+# Relative imports
+from mytools.ansi_tools import ANSIFormatter, StyleBuilder, bubble
 
 ESC = '\x1b['
 
 
-#——{ ANSIFormatter.ESCAPE }————————————————————————————————————————————————————
+#——{ ANSIFormatter.escape }————————————————————————————————————————————————————
 
 class TestANSIFormatterESCAPE:
 
 	def test_wraps_string_with_style(self):
-		result = ANSIFormatter.ESCAPE('1', 'hello')
+		result = ANSIFormatter.escape('1', 'hello')
 		assert result == f'{ESC}1mhello{ESC}0m'
 
 	def test_uses_full_reset_by_default(self):
-		result = ANSIFormatter.ESCAPE('3', 'hi')
+		result = ANSIFormatter.escape('3', 'hi')
 		assert result.endswith(f'{ESC}0m')
 
 	def test_uses_custom_reset(self):
-		result = ANSIFormatter.ESCAPE('3', 'hi', reset='23')
+		result = ANSIFormatter.escape('3', 'hi', reset='23')
 		assert result.endswith(f'{ESC}23m')
 
 	def test_int_style_code(self):
-		result = ANSIFormatter.ESCAPE(1, 'bold')
+		result = ANSIFormatter.escape(1, 'bold')
 		assert result == f'{ESC}1mbold{ESC}0m'
 
 	def test_compound_style_code(self):
-		result = ANSIFormatter.ESCAPE('1;3', 'text')
+		result = ANSIFormatter.escape('1;3', 'text')
 		assert result == f'{ESC}1;3mtext{ESC}0m'
 
 

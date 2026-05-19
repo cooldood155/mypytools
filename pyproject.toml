@@ -16,7 +16,7 @@ authors = [{name = "Evan Reumann", email = "evanrileyreumann@gmail.com"}]
 license = {text = "MIT"}
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "mypy>=1.0", "ruff>=0.1"]
+dev = ["pytest>=7.0", "mypy>=1.0", "ruff>=0.1", "isort>=5.0"]
 
 
 #——{ Setuptools-Package(s) }———————————————————————————————————————————————————
@@ -57,7 +57,7 @@ force-exclude = true
 #——{ Formatting }——————————————————————
 [tool.ruff.format]
 quote-style = "single"
-indent-style = "tab"
+indent-style = "space"
 line-ending = "lf"
 
 docstring-code-format = true
@@ -71,7 +71,6 @@ select = [
     "E",    # pycodestyle errors
     "W",    # pycodestyle warnings (Enables W505 max-doc-length rule)
     "F",    # Pyflakes (basic syntax & variable errors)
-    "I",    # isort (automatic import sorting)
     "B",    # flake8-bugbear (catches subtle design bugs and logic flaws)
     "N",    # pep8-naming (enforces camelCase for classes, snake_case for functions)
     "UP",   # pyupgrade (forces modern Python syntax upgrades automatically)
@@ -79,6 +78,10 @@ select = [
     "SIM",  # flake8-simplify (suggests simpler, cleaner wys to write logic)
     "C4",   # flake8-comprehensions (optimizes dict/list/set comprehensions)
     "RUF",  # Ruff-specific rules
+]
+
+ignore = [
+    "D212" # Multiline summaries start after the opening quotes
 ]
 
 
@@ -100,9 +103,17 @@ known-first-party = ["mytools"]
 known-local-folder = ["src"]
 
 
-[tool.ruff.lint.isort.import-heading]
-future = "Future imports"
-standard-library = "Standard library imports"
-third-party = "Third party imports"
-first-party = "Project imports"
-local-folder = "Relative imports"
+#——{ isort }———————————————————————————————————————————————————————————————————
+
+[tool.isort]
+profile = "black"
+line_length = 80
+known_first_party = ["mytools"]
+known_local_folder = ["src"]
+combine_as_imports = true
+
+import_heading_future = "Future imports"
+import_heading_stdlib = "Standard library imports"
+import_heading_thirdparty = "Third party imports"
+import_heading_firstparty = "Project imports"
+import_heading_localfolder = "Relative imports"

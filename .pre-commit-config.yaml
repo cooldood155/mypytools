@@ -1,11 +1,24 @@
 repos:
+  - repo: https://github.com/PyCQA/isort
+    rev: 9.0.0a3
+    hooks:
+      - id: isort
+        files: ^src/mytools/
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.11.8
     hooks:
       - id: ruff
-        files: ^src/
+        files: ^src/mytools/
       - id: ruff-format
-        files: ^src/
+        files: ^src/mytools/
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.10.0
+    hooks:
+      - id: mypy
+        files: ^src/mytools/
+        additional_dependencies: []
 
   - repo: local
     hooks:

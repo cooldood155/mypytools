@@ -15,7 +15,7 @@ return type at the type-checker level without runtime overhead.
 
 Examples:
 ```
-    from mytools import filter_none, to_list
+    from mypytools import filter_none, to_list
 
     # Flatten nested iterables
     to_list([1, 2], (3, 4), 5)       # [1, 2, 3, 4, 5]

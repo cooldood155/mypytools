@@ -4,7 +4,7 @@
 import pytest
 
 # Relative imports
-from mytools.ansi_tools import ANSIFormatter, StyleBuilder, bubble
+from mypytools.ansi_tools import ANSIFormatter, StyleBuilder, bubble
 
 ESC = '\x1b['
 

@@ -9,10 +9,10 @@ on:
 jobs:
   test:
     strategy:
-      fail-fast: false # One OS failure does NOT cancel the other OS runs
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.11", "3.12", "3.13"] 
+        python-version: ["3.11", "3.12", "3.13"]
 
     runs-on: ${{ matrix.os }}
 
@@ -24,22 +24,21 @@ jobs:
         uses: actions/setup-python@v5.6.0
         with:
           python-version: ${{ matrix.python-version }}
-          # allow-prereleases: true 
 
       - name: Install dependencies
         run: pip install -e ".[dev]"
 
-      - name: Check import sortting (isort)
-        run: isort --check-only --diff src/mytools
+      - name: Check import sorting (ruff)
+        run: ruff check --select I src/mypytools
 
       - name: Lint check (ruff)
-        run: ruff check src/mytools
+        run: ruff check src/mypytools
 
       - name: Format check (ruff)
-        run: ruff format --check src/mytools
+        run: ruff format --check src/mypytools
 
       - name: Type check (mypy)
-        run: mypy src/mytools --strict
+        run: mypy src/mypytools --strict
 
       - name: Run tests
         run: pytest

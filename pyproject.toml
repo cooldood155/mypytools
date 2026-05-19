@@ -16,7 +16,13 @@ authors = [{name = "Evan Reumann", email = "evanrileyreumann@gmail.com"}]
 license = {text = "MIT"}
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "mypy>=1.0", "ruff>=0.1", "isort>=5.0"]
+dev = [
+    "isort>=5.0",
+    "mypy>=1.0",
+    "ruff>=0.1",
+    "pre-commit>=3.0",
+    "pytest>=7.0",
+]
 
 
 #——{ Setuptools-Package(s) }———————————————————————————————————————————————————
@@ -65,7 +71,7 @@ docstring-code-line-length = "dynamic"
 
 #——{ Linting & Rules}——————————————————
 [tool.ruff.lint]
-task-tags = ["TODO", "FIXME"]
+task-tags = ["TODO", "FIXME", "TASK"]
 
 select = [
     "E",    # pycodestyle errors

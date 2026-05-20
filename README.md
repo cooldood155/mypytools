@@ -6,6 +6,12 @@ My custom Python utility library. Zero core dependencies — install only what y
 
 - Python >= 3.11
 
+## Installation
+see – [here](./USAGE.md)
+
+## Development
+see – [here](DEV.md)
+
 ---
 
 ## License

@@ -22,6 +22,10 @@ py scripts/dev_deps.py
 python3 scripts/dev_deps.py
 ```
 
+Optionally, install the dependencies manually:
+
+- 
+
 Then clone the repository, change your directory to `mypytools`, install the library along with the dev dependencies, and hook up the git commit hooks.
 
 ```bash
@@ -34,17 +38,22 @@ pre-commit install        # hooks up git commit hooks
 The `-e` flag installs in **editable mode** — changes you make in `src/` are
 immediately reflected without reinstalling.
 
-You can omit this flag if necessary.
+You can omit this flag if necessary, manually updating by re-running `pip install ".[dev]"`.
 
 ## Day-to-day
 
 - All **test modules** are written within the `tests/` directory
   - Each test module name starts with `test_` (e.g. `test_ansi_tools.py`)
-  - Each test function/method begins with the `test_` prefix as well (e.g. `test_reset_intensity(self): ...`)
+  - Each test function/method begins with the `test_` prefix (e.g. `test_reset_intensity(self): ...`)
+  - Each test class begins with the `Test` prefix (e.g. `TestANSIFormatterESCAPE`)
 - All **Python modules** are written within the `src/mypytools/` directory
   - Follows the *src layout* convention; packages are initialized using an `__init__.py` initializer file
 - All **C extension modules** are written within the `src/ext_modules/` directory
-- All **documentation** is written within the `docs/` directory and must be markdown
+  - Each module name begins with `_c_` (e.g. `_c_to_list`)
+  - Functions, methods, classes, and variables follow the Python conventions
+    - If there is a pure Python counterpart to fallback to, ensure they share the same name
+- All **documentation** is written within the `docs/` directory
+  - Each doc file must be markdown
 
 ```bash
 ruff check src/mypytools/          # lint

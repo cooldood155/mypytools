@@ -83,39 +83,30 @@ def get_logger(
     a single `FileHandler`.
 
     Args:
-        log_path: The file path where logs will be written. Overrides
-            the `'PYTOOLS_LOG_DIR'` environment variable if provided. Defaults
-           to the current working directory. Stores the log file with the name:
-            `<module_name>.log`.
-        level: The logging threshold level (e.g., 'debug', 'info'). Overrides
-            the `'PYTOOLS_LOG_LEVEL'` environment variable if provided.
-            Defaults to `debug`.
-        name: The explicit name for the logger. If omitted, it is inferred from
-            the calling module's __name__. Overrides the `PYTOOLS_LOG_SHARED`
-            environment variable if provided.
-        env: The environment mode ('dev' or 'prod'). Overrides the
-            `'PYTOOLS_LOG_MODE'` environment variable if provided. Defaults to
-            `dev` if no environment variable is provided.
+        log_path (Path | None):
+          The file path where logs will be written. Overrides
+          the `'PYTOOLS_LOG_DIR'` environment variable if provided. Defaults
+          to the current working directory. Stores the log file with the
+          name: `<module_name>.log`.
+        level (int | None):
+          The logging threshold level (e.g., 'debug', 'info'). Overrides
+          the `'PYTOOLS_LOG_LEVEL'` environment variable if provided.
+          Defaults to `debug`.
+        name (str | None):
+          The explicit name for the logger. If omitted, it is inferred from
+          the calling module's __name__. Overrides the `PYTOOLS_LOG_SHARED`
+          environment variable if provided.
+        env (str | None):
+          The environment mode ('dev' or 'prod'). Overrides the
+          `'PYTOOLS_LOG_MODE'` environment variable if provided. Defaults to
+          `dev` if no environment variable is provided.
 
     Returns:
         A configured `Logger` instance attached to a dedicated `FileHandler`.
 
     Notes:
-        `level` — can be one of 5 levels:
-
-        1. `debug`
-        2. `info`
-        3. `warning`
-        4. `error`
-        5. `critical`
-
-        - Each level captures all logs of its level and above (e.g. `'debug'`
-        captures all logs, `'critical'` only captures critical logs)
-
-        `env` — can be one of 2 environment modes:
-
-        1. `prod` — production environments, provides single line compact logs
-        2. `dev` — development environments, provides human readable logs
+        See more details on arguments, specifically environment keys and
+        values, at :doc:`/docs/packages/LOG.md`.
     """
     if not name:
         frame = stack()[1]

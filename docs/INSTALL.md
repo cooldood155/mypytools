@@ -22,9 +22,9 @@ If a module needs a dependency you haven't installed, `mytools` will tell you ex
 
 ### Grabbing Specific Modules — (*no* install at all)
 
-This is the recommended approach if you plan on only using bits and pieces of the library and want to ovoid the memory cost of installing the entire library.
+This is the **recommended** approach if you plan on only using bits and pieces of the library and want to ovoid the memory cost of installing the entire library.
 
-`MyTools` is structured using the common **src layout**. Modules with no dependencies can be copied directly into your project and used as-is — check the module's docstring to confirm it has no requirements before doing this.
+`MyTools` is structured using the common **src layout**. Modules or entire packages with no dependencies can be copied directly into your project and used as-is — check the module's docstring to confirm it has no requirements before doing this.
 
 If a module *does* have dependencies and you're using it standalone (copied, not installed), just install the raw dependencies directly:
 

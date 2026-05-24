@@ -26,7 +26,6 @@ import subprocess
 import sys
 from typing import Optional
 
-
 GIT_MIN = '2.54.0'
 GH_MIN  = '2.92.0'
 

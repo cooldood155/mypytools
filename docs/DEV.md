@@ -6,9 +6,14 @@
 
 ## First time setup
 
-Commands are ran from the root `mypytools` directory.
+Clone the repository and change your directory to `mypytools`.
 
-Run `scripts/dev_deps.py` to install or update the required dependencies, not available through pip (e.g. git, GitHub.CLI).
+```bash
+git clone https://github.com/cooldood155/mypytools
+cd mypytools
+```
+
+Then run `scripts/dev_deps.py` to install or update the required dependencies, not available through pip (e.g. git, GitHub.CLI).
 
 ***Windows***:
 
@@ -24,13 +29,12 @@ python3 scripts/dev_deps.py
 
 Optionally, install the dependencies manually:
 
-- 
+- git `>=2.54.0` — [installing](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+- github.CLI `>=2.92.0` — [installing](https://github.com/cli/cli#installation)
 
-Then clone the repository, change your directory to `mypytools`, install the library along with the dev dependencies, and hook up the git commit hooks.
+Install the library along with the dev dependencies, and hook up the git commit hooks.
 
 ```bash
-git clone https://github.com/cooldood155/mypytools
-cd mypytools
 pip install -e ".[dev]"   # installs mypytools + dev tools (ruff, pytest, mypy)
 pre-commit install        # hooks up git commit hooks
 ```
@@ -103,7 +107,7 @@ Instead, it is highly recommended to explicitly target the files or package dire
     mypy src/mypytools/ --strict
     ```
 
-    Type checks the passed in packages/files that have type annotations conforming to [PEP 484](https://www.python.org/dev/peps/pep-0484/).
+    Type checks the passed in packages/modules that have type annotations conforming to [PEP 484](https://www.python.org/dev/peps/pep-0484/).
 
     The `--strict` flag is appended every time — a type related error will rarely appear at runtime without a corresponding mypy error, unless you explicitly circumvent mypy somehow (i.e., using a pragma: ``# type: ignore``).
 

@@ -4,19 +4,33 @@ Developer diagnosic utilities for logging and exception handling.
 Provides automated stack-inferred file logging with environment-aware
 formatting styles alongside a polished, color-coded global exception hook
 for readable terminal tracebacks.
+
+Listed here respectively:
+    :func:`get_logger`
+    :func:`setup_hooks`
 """
 
 # Standard library imports
 import os
 import sys
 from inspect import getmodule, stack
-from logging import DEBUG, FileHandler, Formatter, Logger, getLogger
+from logging import FileHandler, Formatter, Logger, getLogger
 from pathlib import Path
 from traceback import extract_tb
 from types import TracebackType
 
-# Project imports
-from mytools.ansi_tools import StyleBuilder
+try:
+    # Project imports
+    from mypytools.ansi_tools import StyleBuilder
+except ImportError:
+    try:
+        # Project imports
+        from mypytools.ansi_tools.style_builder import StyleBuilder
+    except ImportError as e:
+        raise ImportError(
+            'Failed to find StyleBuilder from mypytools.ansi_tools '
+            'or mypytools.ansi_tools.style_builder'
+        ) from e
 
 __all__ = ['get_logger', 'setup_hooks']
 
@@ -57,7 +71,7 @@ _load_local_env()
 
 def get_logger(
     log_path: Path | None = None,
-    level: int = DEBUG,
+    level: int | None = None,
     name: str | None = None,
     env: str | None = None,
 ) -> Logger:
@@ -69,45 +83,72 @@ def get_logger(
     a single `FileHandler`.
 
     Args:
-        log_path: The file path where logs will be written. Defaults to
-            `<module_name>`.log` in the current working directory.
-        level: The logging threshold level (e.g., DEBUG, INFO).
-            Defaults to DEBUG.
-        name: The explicit name for the logger. If omitted, it is inferred from
-            the calling module's __name__.
-        env: The environment mode ('dev' or 'prod'). Overrides the `'APP_ENV'`
-            environment variable if provided. Defaults to `None`.
+        log_path (Path | None):
+          The file path where logs will be written. Overrides
+          the `'PYTOOLS_LOG_DIR'` environment variable if provided. Defaults
+          to the current working directory. Stores the log file with the
+          name: `<module_name>.log`.
+        level (int | None):
+          The logging threshold level (e.g., 'debug', 'info'). Overrides
+          the `'PYTOOLS_LOG_LEVEL'` environment variable if provided.
+          Defaults to `debug`.
+        name (str | None):
+          The explicit name for the logger. If omitted, it is inferred from
+          the calling module's __name__. Overrides the `PYTOOLS_LOG_SHARED`
+          environment variable if provided.
+        env (str | None):
+          The environment mode ('dev' or 'prod'). Overrides the
+          `'PYTOOLS_LOG_MODE'` environment variable if provided. Defaults to
+          `dev` if no environment variable is provided.
 
     Returns:
         A configured `Logger` instance attached to a dedicated `FileHandler`.
+
+    Notes:
+        See more details on arguments, specifically environment keys and
+        values, at :doc:`/docs/packages/LOG.md`.
     """
     if not name:
         frame = stack()[1]
         module = getmodule(frame[0])
         name = module.__name__ if module else '__main__'
 
-    log_path = log_path or Path.cwd() / f'{name}.log'
     logger = getLogger(name)
-    logger.setLevel(level)
 
-    # Check passed `env` arg, fallback to OS env var, default to `dev`
-    environment = env or os.environ.get('APP_ENV', 'dev').lower()
+    log_dir = Path(os.environ.get('PYTOOLS_LOG_DIR', 'NONE'))
+    logger.setLevel(
+        level or os.environ.get('PYTOOLS_LOG_LEVEL', 'debug') or 'debug'
+    )
+    environment = env or os.environ.get('PYTOOLS_LOG_MODE', 'dev').lower()
+
+    log_path = (
+        log_path or log_dir / f'{name}.log'
+        if str(log_dir) != 'NONE'
+        else Path.cwd() / f'{name}.log'
+    )
 
     if not logger.handlers:
         handler = FileHandler(log_path, mode='w', encoding='UTF-8')
 
         # ——{ Format Selection }————————————————————————————
         if environment == 'prod':
-            # Production: Single-line, tap-separated, strict columns
+            # Production: Single-line, tab-separated, strict columns
             fmt = (
-                '%(asctime)s\t%(levelname)-8s\t%(filename)s:%(lineno)d\t'
+                '%(asctime)s\t%(levelname)-8s — PROD\t%(filename)s:%(lineno)d\t'
                 '%(funcName)s\t%(message)s'
             )
-        else:
+        elif environment == 'dev':
             # Development: Multi-line, visually spaced, human-readable
             fmt = (
                 '%(asctime)s @--> %(filename)s %(lineno)d %(funcName)s '
-                '!--> [%(levelname)s] ::\n\t%(message)s\n'
+                '!--> [%(levelname)s — DEV] ::\n\t%(message)s\n'
+            )
+        else:
+            raise OSError(
+                "Environment variables 'PYTOOLS_ENV_MODE' is not one of the "
+                'allowed environment modes — see here '
+                '[https://github.com/cooldood155/mypytools/blob/main/README.md]'
+                '(https://github.com/cooldood155/mypytools/blob/main/README.md)'
             )
 
         handler.setFormatter(

@@ -1,10 +1,9 @@
 """Tests for src/mytools/ansi_tools/formatter.py"""
-
 # Third party imports
 import pytest
 
-# Relative imports
-from mytools.ansi_tools import ANSIFormatter, StyleBuilder, bubble
+# Project imports
+from mypytools.ansi_tools import ANSIFormatter, StyleBuilder, bubble
 
 ESC = '\x1b['
 

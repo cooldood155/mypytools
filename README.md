@@ -8,19 +8,17 @@ Install only what you need
 
 ## Development
 
-[DEV.md](./docs/DEV.md)
+[DEV.md](./docs/DEV.md) — guides you through installing the library and all of the required development dpendencies as well as explaining day-to-day commands to use and more.
 
-## Requirements
+## Usage
 
-- Python >= 3.11
-
-## Installation
-see – [here](./USAGE.md)
-
-## Development
-see – [here](DEV.md)
+[USAGE.md](./docs/USAGE.md) — guides you through using all of the public facing namespaces/packages/subpackages/modules/variables/objects of the entire library.
 
 ---
+
+### Requirements
+
+- Python >= 3.11
 
 ## Reach out
 

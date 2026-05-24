@@ -28,8 +28,13 @@ jobs:
       - name: Install dependencies
         run: pip install -e ".[dev]"
 
+      - name: Run isort
+        uses: isort/isort-action@v1
+        with:
+          configuration: "--check-only --diff"
+
       - name: Check import sorting (ruff)
-        run: ruff check --select I src/mypytools
+        run: ruff check src/mypytools
 
       - name: Lint check (ruff)
         run: ruff check src/mypytools

@@ -1,10 +1,20 @@
 # Log Package
 
-## Publically Exposed Modules
+Developer diagnotic utilities for logging and exception handling
 
-- `log` – developer diagnostic utilities for logging and exception handling.
+## Provided Modules
 
-### *log > get_logger*
+- [log.py](#log)
+  - [get_logger()](#log--get_logger)
+  - [setup_hooks()](#log--setup_hooks)
+
+---
+
+### `log`
+
+- Developer diagnostic utilities for logging and exception handling.
+
+#### *log > get_logger*
 
 ```python
 def get_logger(
@@ -82,7 +92,7 @@ Configure and retrieve a file-backend `Logger` instance.
     1. `'dev'` — pretty printed easy to read logs.
     2. `'prod'` — single line, strictly formatted logs.
 
-### *log > setup_hooks*
+#### *log > setup_hooks*
 
 ```Python
 def setup_hooks() -> None: ...

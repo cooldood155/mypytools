@@ -6,8 +6,16 @@ A guide for installing MyPyTools, optional dependencies provided by MyPyTools, a
 
 ### Full Install From [GitHub](https://github.com/cooldood155/mypytools)
 
+#### Latest version
+
 ```bash
 pip install git+https://github.com/cooldood155/mypytools
+```
+
+#### Specific version
+
+```bash
+pip install git+https://github.com/cooldood155/mypytools@v<major>.<minor>.<patch>
 ```
 
 <!-- ### Optional Dependencies
@@ -22,7 +30,7 @@ If a module needs a dependency you haven't installed, `mytools` will tell you ex
 
 ### Grabbing Specific Modules — (*no* install at all)
 
-This is the **recommended** approach if you plan on only using bits and pieces of the library and want to ovoid the memory cost of installing the entire library.
+This is the **recommended** approach if you plan on only using bits and pieces of the library and want to avoids the disk cost of installing the entire library.
 
 `MyTools` is structured using the common **src layout**. Modules or entire packages with no dependencies can be copied directly into your project and used as-is — check the module's docstring to confirm it has no requirements before doing this.
 

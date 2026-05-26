@@ -165,6 +165,7 @@ class StyleBuilder:
         finish: Literal[False] = False,
         processed_sep: str = '',
         processed_sep_end: bool = False,
+        processed_sep_end_str: str = '',
     ) -> Self: ...
 
     @overload
@@ -176,6 +177,7 @@ class StyleBuilder:
         finish: Literal[True],
         processed_sep: str = '',
         processed_sep_end: bool = False,
+        processed_sep_end_str: str = '',
     ) -> str: ...
 
     def add(
@@ -186,9 +188,33 @@ class StyleBuilder:
         finish: bool = False,
         processed_sep: str = '',
         processed_sep_end: bool = False,
+        processed_sep_end_str: str = '',
     ) -> str | Self:
         """
         Append raw (unstyled) text segments to the builder cache.
+
+        Args:
+            raw_text (*str):
+                A tuple of the raw strings you are adding.
+            sep (str):
+                The string used to join each str entry of ``raw_text``.
+            end_sep (str):
+                The string appended to the resulting ``sep`` joined
+                ``raw_text`` string.
+            finish (bool):
+                If True (*False* by default), all of the cached style strings
+                are joined using the ``processed_sep`` string and returned.
+            processed_sep (str):
+                The string used to join each cached style string together, only
+                does something if ``finish`` is True.
+            processed_sep_end (bool):
+                If True (*False* by default), the ``processed_sep`` string is
+                appended to the finished style string if
+                ``processed_sep_end_str`` is falsy, otherwise
+                ``processed_sep_end_str`` is appended.
+            processed_sep_end_str (str):
+                The string to append to the finished style string, only works
+                if ``finish`` and ``processed_sep_end`` is set to True.
 
         Raises:
             ValueError:
@@ -206,7 +232,11 @@ class StyleBuilder:
 
         if finish:
             result = processed_sep.join(self._formatted) + (
-                processed_sep if processed_sep_end else ''
+                processed_sep
+                if (processed_sep_end and not processed_sep_end_str)
+                else processed_sep_end_str
+                if processed_sep_end
+                else ''
             )
             self._formatted.clear()
             return result

@@ -1,24 +1,28 @@
 # MyPyTools
 
-Install only what you need
+Install only what you need — My personal python packages and modules I've decided to share with everyone.
+
+## Requirements – *Non-Developer*
+
+There is a single requirement for installing/grabbing and using my tools:
+
+- Python >= 3.11
+
+  If you are interested in what *is* supported, you can check out [SUPPORTED](./docs/SUPPORTED.md)
 
 ## Installation
 
-[INSTALL.md](./docs/INSTALL.md) — guides you through installing the library and optional dependencies; explains how to grab specific modules/packages and import them directly into your project.
+   [INSTALL](./docs/INSTALL.md) — guides you through installing the library and optional dependencies; explains how to grab specific modules/packages and import them directly into your project.
 
 ## Development
 
-[DEV.md](./docs/DEV.md) — guides you through installing the library and all of the required development dpendencies as well as explaining day-to-day commands to use and more.
+  [DEV](./docs/DEV.md) — guides you through cloning the repository, installing all of the required development dpendencies, and explains day-to-day development.
 
 ## Usage
 
-[USAGE.md](./docs/USAGE.md) — guides you through using all of the public facing namespaces/packages/subpackages/modules/variables/objects of the entire library.
+  [USAGE](./docs/USAGE.md) — guides you through using all of the public facing namespaces/packages/subpackages/modules/variables/objects of the entire library.
 
 ---
-
-### Requirements
-
-- Python >= 3.11
 
 ## Reach out
 

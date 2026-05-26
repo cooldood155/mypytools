@@ -32,17 +32,17 @@ jobs:
       - name: Check import sorting (isort)
         uses: isort/isort-action@v1
         with:
-          sort-paths: "src/mypytools"
+          sort-paths: "src/mypytools/"
           configuration: "--check-only --diff"
 
       - name: Lint check (ruff)
-        run: ruff check src/mypytools
+        run: ruff check src/mypytools/
 
       - name: Format check (ruff)
-        run: ruff format --check src/mypytools
+        run: ruff format --check src/mypytools/
 
       - name: Type check (mypy)
-        run: mypy src/mypytools --strict
+        run: mypy src/mypytools/ --strict
 
       - name: Run tests (pytest)
         run: pytest -x

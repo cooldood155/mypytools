@@ -2,7 +2,7 @@
 Utilities for flattening and filtering heterogeneous iterables.
 
 **Exposed Modules**:
-- :file:`list.py` — list flattening and filtering utilities.
+- `list.py` — list flattening and filtering utilities.
 
 **Provides**:
 

@@ -15,15 +15,15 @@ and **wrapper/helper** modules and packages for third-party libraries.
 **Exposed Modules**:
 
 *From* ***ansi_tools***:
-- :file:`formatter.py` — low-level ANSI terminal text formatting.
-- :file:`style_builder.py` — high-level ANSI terminal styling and pre-formatted
+- `formatter.py` — low-level ANSI terminal text formatting.
+- `style_builder.py` — high-level ANSI terminal styling and pre-formatted
                              printable styles.
 
 *From* ***flattener***:
-- :file:`list.py` — list flattening and filtering utilities.
+- `list.py` — list flattening and filtering utilities.
 
 *From* ***log***:
-- :file:`log.py` — configure and retrieve a file-backend `Logger` instance
+- `log.py` — configure and retrieve a file-backend `Logger` instance
                    and/or install an ANSI-stylized global exception hook.
 
 **Provides**:

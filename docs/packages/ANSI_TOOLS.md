@@ -9,7 +9,7 @@ The packages initializer file ([``__init__.py``](../../src/mypytools/ansi_tools/
 
 ---
 
-### `formatter`
+### ``formatter``
 
 - A low-level ANSI terminal formatting utility
 

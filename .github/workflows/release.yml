@@ -1,10 +1,9 @@
-name: CI
+name: Release
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    tags:
+      - "v*.*.*"
 
 jobs:
   test:
@@ -17,11 +16,9 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v4.2.2
 
-      - name: Set up Python
-        uses: actions/setup-python@v5.6.0
+      - uses: actions/setup-python@v5.6.0
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -32,17 +29,29 @@ jobs:
       - name: Check import sorting (isort)
         uses: isort/isort-action@v1
         with:
-          sort-paths: "src/mypytools/"
+          sort-paths: "src/mypytools"
           configuration: "--check-only --diff"
 
-      - name: Lint check (ruff)
+      - name: Ruff lint
         run: ruff check src/mypytools/
 
-      - name: Format check (ruff)
+      - name: Ruff format
         run: ruff format --check src/mypytools/
 
-      - name: Type check (mypy)
+      - name: Mypy
         run: mypy src/mypytools/ --strict
 
-      - name: Run tests (pytest)
+      - name: Pytest
         run: pytest -x
+
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true

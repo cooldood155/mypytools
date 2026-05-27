@@ -165,6 +165,7 @@ class StyleBuilder:
         finish: Literal[False] = False,
         processed_sep: str = '',
         processed_sep_end: bool = False,
+        processed_sep_end_str: str = '',
     ) -> Self: ...
 
     @overload
@@ -176,6 +177,7 @@ class StyleBuilder:
         finish: Literal[True],
         processed_sep: str = '',
         processed_sep_end: bool = False,
+        processed_sep_end_str: str = '',
     ) -> str: ...
 
     def add(
@@ -186,9 +188,33 @@ class StyleBuilder:
         finish: bool = False,
         processed_sep: str = '',
         processed_sep_end: bool = False,
+        processed_sep_end_str: str = '',
     ) -> str | Self:
         """
         Append raw (unstyled) text segments to the builder cache.
+
+        Args:
+            raw_text (*str):
+                A tuple of the raw strings you are adding.
+            sep (str):
+                The string used to join each str entry of ``raw_text``.
+            end_sep (str):
+                The string appended to the resulting ``sep`` joined
+                ``raw_text`` string.
+            finish (bool):
+                If True (*False* by default), all of the cached style strings
+                are joined using the ``processed_sep`` string and returned.
+            processed_sep (str):
+                The string used to join each cached style string together, only
+                does something if ``finish`` is True.
+            processed_sep_end (bool):
+                If True (*False* by default), the ``processed_sep`` string is
+                appended to the finished style string if
+                ``processed_sep_end_str`` is falsy, otherwise
+                ``processed_sep_end_str`` is appended.
+            processed_sep_end_str (str):
+                The string to append to the finished style string, only works
+                if ``finish`` and ``processed_sep_end`` is set to True.
 
         Raises:
             ValueError:
@@ -206,7 +232,11 @@ class StyleBuilder:
 
         if finish:
             result = processed_sep.join(self._formatted) + (
-                processed_sep if processed_sep_end else ''
+                processed_sep
+                if (processed_sep_end and not processed_sep_end_str)
+                else processed_sep_end_str
+                if processed_sep_end
+                else ''
             )
             self._formatted.clear()
             return result
@@ -504,6 +534,7 @@ class StyleBuilder:
         return ';'.join(resets)
 
     def _clear_codes(self) -> None:
+        """Removes all cached codes from ``_codes``."""
         self._codes.clear()
 
     @overload
@@ -512,13 +543,16 @@ class StyleBuilder:
         text: str | list[str],
         *,
         sep: str = ', ',
+        sep_end_str: str = '',
         sep_end: bool = True,
         finish: Literal[True],
         processed_sep: str = '',
+        processed_sep_end_str: str = '',
         processed_sep_end: bool = False,
         prepend: str = '',
         append: str = '',
         style: str = '',
+        clear_codes: bool = True,
     ) -> str: ...
 
     @overload
@@ -527,13 +561,16 @@ class StyleBuilder:
         text: str | list[str],
         *,
         sep: str = ', ',
+        sep_end_str: str = '',
         sep_end: bool = True,
         finish: Literal[False] = False,
         processed_sep: str = '',
+        processed_sep_end_str: str = '',
         processed_sep_end: bool = False,
         prepend: str = '',
         append: str = '',
         style: str = '',
+        clear_codes: bool = True,
     ) -> Self: ...
 
     def apply(
@@ -541,16 +578,66 @@ class StyleBuilder:
         text: str | list[str],
         *,
         sep: str = ', ',
+        sep_end_str: str = '',
         sep_end: bool = True,
         finish: bool = False,
         processed_sep: str = '',
+        processed_sep_end_str: str = '',
         processed_sep_end: bool = False,
         prepend: str = '',
         append: str = '',
         style: str = '',
+        clear_codes: bool = True,
     ) -> str | Self:
         """
         Apply accumulated style codes to ``text`` and cache the result.
+
+        Args:
+            text (str | list[str]):
+                The text you wish to apply the previously accumulated style
+                codes to.
+            sep (str):
+                If `text` was passed as a list, every str within that list
+                is styled and joined together using this string.
+            sep_end (bool):
+                If this boolean is True (*True* by default) and ``text`` was
+                passed as a list, the string passed to `sep` is appended to the
+                end of joined strings (e.g. ``apply(['1', '4', '2'], sep=' + ',
+                sep_end_str=' = ', style=...``); results is: ``"1 + 4 + 2 = "``
+                ).
+            sep_end_str (str):
+                If `text` was passed as a list, every str within that list
+                is styled and joined together using the `sep` string and this
+                string is then appended. If you pass nothing to `sep_end_str`,
+                or a falsy value, and text is a list, then `sep` is appended to
+                the result of the joined strings.
+            finish (bool):
+                If True, all of the cached style strings are joined together
+                using the ``processed_sep`` string. The ``processed_sep`` str
+                is also appended to the joined strings if ``processed_sep_end``
+                is True.
+            processed_sep (str):
+                The string to use when joining every styled str from cache.
+                Only does something when ``finish`` is set to True.
+            processed_sep_end (bool):
+                If this boolean is True (*False* by default) and ``finish`` is
+                True, ``processed_sep`` is appended to the joined cache
+                strings if ``processed_sep_end_str`` is not provided, otherwise
+                ``processed_sep_end_str`` is appended.
+            processed_sep_end_str (str):
+                If this string is provided (not falsy) and ``finish`` is True,
+                then it is appended to the joined styled strings.
+            prepend (str):
+                Any raw (or custom styled) string you want to prepend to each
+                string passed into ``text``.
+            append (str):
+                Any raw (or custom styled) string you want to append to each
+                string passed into ``text``.
+            style (str):
+                The raw SGR style codes or fully formated SGR format as a str.
+            clear_codes (bool):
+                If ``clear_codes`` is True (*True* by default) then all of the
+                cached codes are removed after applying them.
 
         Raises:
             ValueError:
@@ -568,7 +655,7 @@ class StyleBuilder:
 
         active_codes = style.split(';') if style else self._codes.copy()
 
-        _style = style or ';'.join(active_codes)
+        _style = style if not active_codes else ';'.join(active_codes)
 
         if not _style:
             raise ValueError('Expected a style to apply to the text.')
@@ -585,7 +672,13 @@ class StyleBuilder:
                         ANSIFormatter.escape(_style, t, reset=reset)
                         for t in text
                     )
-                    + (sep if sep_end else '')
+                    + (
+                        sep
+                        if (sep_end and not sep_end_str)
+                        else sep_end_str
+                        if sep_end
+                        else ''
+                    )
                 )
                 if isinstance(text, list)
                 else ANSIFormatter.escape(_style, text, reset=reset)
@@ -595,11 +688,16 @@ class StyleBuilder:
 
         self._formatted.append(processed)
 
-        self._clear_codes()
+        if clear_codes:
+            self._clear_codes()
 
         if finish:
             result = processed_sep.join(self._formatted) + (
-                processed_sep if processed_sep_end else ''
+                processed_sep
+                if (processed_sep_end and not processed_sep_end_str)
+                else processed_sep_end_str
+                if processed_sep_end
+                else ''
             )
             self._formatted.clear()
             return result

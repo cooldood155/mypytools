@@ -19,17 +19,18 @@ Exit Codes:
   - `1` — A shell command exited with a code other than 0
   - `2` — A shell command took longer than 5 minutes to complete
 """
+
 # Standard library imports
 import platform
 import re
 import subprocess
 import sys
-from typing import Optional
 
 GIT_MIN = '2.54.0'
-GH_MIN  = '2.92.0'
+GH_MIN = '2.92.0'
 
-def get_installed_version(command: str) -> Optional[tuple[int, ...]] | None:
+
+def get_installed_version(command: str) -> tuple[int, ...] | None | None:
     """
     Run `<command> --version` and extract the first X.Y.Z found in the output.
 
@@ -37,8 +38,7 @@ def get_installed_version(command: str) -> Optional[tuple[int, ...]] | None:
         A tuple like (2, 54, 0), or None if the command isn't available.
     """
     result = subprocess.run(
-        f"{command} --version",
-        shell=True, capture_output=True, text=True
+        f'{command} --version', shell=True, capture_output=True, text=True
     )
     if result.returncode != 0:
         return None
@@ -47,10 +47,11 @@ def get_installed_version(command: str) -> Optional[tuple[int, ...]] | None:
         return None
     return tuple(int(x) for x in match.groups())
 
+
 def meets_min_version(command: str, min_version: str) -> bool:
     """
     Return True if the installed version is >= min_version.
-    
+
     Returns False if the command returned with code `0` or the output did not
     match what was expected.
 
@@ -65,6 +66,7 @@ def meets_min_version(command: str, min_version: str) -> bool:
         return False
     required = tuple(int(x) for x in min_version.split('.'))
     return installed >= required
+
 
 def run_command(command: str) -> None:
     """
@@ -94,6 +96,7 @@ def run_command(command: str) -> None:
         )
         sys.exit(2)
 
+
 def is_command_available(command: str) -> bool:
     """
     Attept to run the command with `--version` appended looking for any output.
@@ -105,10 +108,13 @@ def is_command_available(command: str) -> bool:
     Returns:
         bool: True if the command returns with code `0` and has output.
     """
-    return subprocess.run(
-        f'{command} --version',
-        shell=True, capture_output=True
-    ).returncode == 0
+    return (
+        subprocess.run(
+            f'{command} --version', shell=True, capture_output=True
+        ).returncode
+        == 0
+    )
+
 
 def install_if_missing_windows(package_id, command, min_version):
     """
@@ -127,6 +133,7 @@ def install_if_missing_windows(package_id, command, min_version):
     else:
         print(f'{command} >= {min_version} is already installed, skipping.')
 
+
 def install_if_missing_mac(package, command, min_version):
     """
     Checks if the dep is missing or doesn't meet the min-version requirement.
@@ -143,6 +150,7 @@ def install_if_missing_mac(package, command, min_version):
         run_command(f'brew upgrade {package}')
     else:
         print(f'{command} >= {min_version} is already installed, skipping.')
+
 
 def install_if_missing_linux_apt(package, command, min_version):
     """
@@ -161,18 +169,21 @@ def install_if_missing_linux_apt(package, command, min_version):
     else:
         print(f'{command} >= {min_version} is already installed, skipping.')
 
+
 def _apt_install(package):
-    'Shared apt install logic (used for both fresh installs and upgrades).'
+    """Shared apt install logic (used for both fresh installs and upgrades)."""
     if package == 'gh':
         for cmd in [
             'sudo mkdir -p -m 755 /etc/apt/keyrings',
-            'wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg'
-              ' | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null',
+            'wget -qO-'
+            ' https://cli.github.com/packages/githubcli-archive-keyring.gpg'
+            ' | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg >'
+            ' /dev/null',
             'sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg',
             'echo "deb [arch=$(dpkg --print-architecture)'
-              ' signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg]'
-              ' https://cli.github.com/packages stable main"'
-              ' | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null',
+            ' signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg]'
+            ' https://cli.github.com/packages stable main"'
+            ' | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null',
             'sudo apt update',
             'sudo apt install gh -y',
         ]:
@@ -182,7 +193,7 @@ def _apt_install(package):
 
 
 def main():
-    'Installs/updates all of the required dependencies for your system.'
+    """Installs/updates all of the required dependencies for your system."""
     os_type = platform.system()
     print(f'Detected OS: {os_type}')
 
@@ -191,13 +202,16 @@ def main():
         install_if_missing_windows('GitHub.CLI', 'gh', GH_MIN)
 
     elif os_type == 'Darwin':
-        install_if_missing_mac('git', 'git',GIT_MIN)
+        install_if_missing_mac('git', 'git', GIT_MIN)
         install_if_missing_mac('gh', 'gh', GH_MIN)
 
     elif os_type == 'Linux':
-        apt_available = subprocess.run(
-            'type apt-get', shell=True, capture_output=True
-        ).returncode == 0
+        apt_available = (
+            subprocess.run(
+                'type apt-get', shell=True, capture_output=True
+            ).returncode
+            == 0
+        )
 
         if apt_available:
             print('Detected Debian/Ubuntu system.')

@@ -51,10 +51,6 @@ to_list(PyObject *self, PyObject *const *args, Py_ssize_t nargs,
         "include_none", "unwrap_layers", "unwrap_dict_keys",
         "unwrap_dict_vals", "preserve_dict_tuples", "cast_to", NULL
     };
-    static _PyArg_Parser parser = {
-        .format   = "|bibilO:to_list",
-        .keywords = keywords,
-    };
 
     int    include_none         = 0;
     int    unwrap_layers        = -1;
@@ -63,20 +59,39 @@ to_list(PyObject *self, PyObject *const *args, Py_ssize_t nargs,
     int    preserve_dict_tuples = 1;
     PyObject *cast_to           = Py_None;
 
-    if (!_PyArg_ParseStackAndKeywords(
-            args + nargs, 0, kwnames, &parser,
-            &include_none, &unwrap_layers, &unwrap_dict_keys,
-            &unwrap_dict_vals, &preserve_dict_tuples, &cast_to))
-        return NULL;
+    PyObject *result = PyList_New(0);
+    if (!result) return NULL;
+
+    PyObject *args_tuple = PyTuple_New(0);
+    if (!args_tuple) { Py_DECREF(result); return NULL; }
+
+    PyObject *kwargs = kwnames ? PyDict_New() : NULL;
+    if (kwnames) {
+        for (Py_ssize_t i = 0; i < PyTuple_GET_SIZE(kwnames); i++) {
+            PyDict_SetItem(kwargs,
+                PyTuple_GET_ITEM(kwnames, i),
+                args[nargs + i]);
+        }
+    }
+
+    static char *kwlist[] = {
+        "include_none", "unwrap_layers", "unwrap_dict_keys",
+        "unwrap_dict_vals", "preserve_dict_tuples", "cast_to", NULL
+    };
+    int ok = PyArg_ParseTupleAndKeywords(
+        args_tuple, kwargs, "|bibilO:to_list", kwlist,
+        &include_none, &unwrap_layers, &unwrap_dict_keys,
+        &unwrap_dict_vals, &preserve_dict_tuples, &cast_to);
+
+    Py_DECREF(args_tuple);
+    Py_XDECREF(kwargs);
+    if (!ok) return NULL;
 
     if (unwrap_layers < -1 || unwrap_layers == 0) {
         PyErr_SetString(PyExc_ValueError,
             "unwrap_layers must be -1 (infinite) or a positive integer >= 1.");
         return NULL;
     }
-
-    PyObject *result = PyList_New(0);
-    if (!result) return NULL;
 
     for (Py_ssize_t i = 0; i < nargs; i++) {
         PyObject *entry = args[i];

@@ -1,7 +1,14 @@
 build/
-*.egg-info/
-__pycache__/
-*_cache/
-.vscode/
+dist/
 
 ruff/
+
+*.egg-info/
+__pycache__/
+venv/
+*.pyd
+*.so
+
+.*_cache/
+*_cache/
+.vscode/

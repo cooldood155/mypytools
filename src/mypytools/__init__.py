@@ -54,13 +54,14 @@ from .ansi_tools import (
     StyleBuilder as StyleBuilder,
     bubble as bubble,
 )
-from .flattener import to_list
+from .flattener import filter_none as filter_none, to_list as to_list
 from .log import get_logger as get_logger, setup_hooks as setup_hooks
 
 __all__ = [
     'ANSIFormatter',
     'StyleBuilder',
     'bubble',
+    'filter_none',
     'get_logger',
     'setup_hooks',
     'to_list',

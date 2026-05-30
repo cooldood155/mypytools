@@ -1,12 +1,17 @@
 [build-system]
-requires = ["setuptools>=82", "setuptools-scm>=9", "wheel"]
+requires = [
+    "setuptools>=82",
+    "setuptools-scm>=9",
+    "wheel",
+    "pybind11>=2.12"
+]
 build-backend = "setuptools.build_meta"
 
 
 #——{ Project }—————————————————————————————————————————————————————————————————
 
 [project]
-name = "mytools"
+name = "mypytools"
 dependencies = []
 dynamic = ["version"]
 description = "Collection of utility tools"
@@ -27,6 +32,13 @@ dev = [
 ]
 
 
+#——{ C++ Extensions }——————————————————————————————————————————————————————————
+[[tool.setuptools.ext-modules]]
+name = "mypytools.flattener._list"
+sources = ["src/mypytools/flattener/_list.cpp"]
+pybind11 = true
+
+
 #——{ Setuptools-Package(s) }———————————————————————————————————————————————————
 
 [tool.setuptools]
@@ -36,8 +48,8 @@ package-dir = {"" = "src"}
 where = ["src"]
 
 [tool.setuptools.package-data]
-mytools = ["py.typed"]
-"mytools.flattener" = ["*.pyi"]
+mypytools = ["py.typed"]
+"mypytools.flattener" = ["*.pyi"]
 
 
 [tool.setuptools_scm]
@@ -110,7 +122,7 @@ force-wrap-aliases = true
 combine-as-imports = true
 split-on-trailing-comma = false
 
-known-first-party = ["mytools"]
+known-first-party = ["mypytools"]
 known-local-folder = ["src"]
 
 
@@ -119,7 +131,7 @@ known-local-folder = ["src"]
 [tool.isort]
 profile = "black"
 line_length = 80
-known_first_party = ["mytools"]
+known_first_party = ["mypytools"]
 known_local_folder = ["src"]
 combine_as_imports = true
 

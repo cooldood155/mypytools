@@ -450,6 +450,17 @@ class StyleBuilder:
                 )
             )
 
+        if (isinstance(g, int) or isinstance(b, int)) and not b24:
+            sb = StyleBuilder()
+            raise ValueError(
+                sb.fg(235, 110, 30)
+                .apply('ValueError: ')
+                .add(
+                    'g or b arg of fg() was added — b24 argument is False',
+                    finish=True,
+                )
+            )
+
         self._codes.append(
             f'{ANSIFormatter.Foreground.CUSTOM.value}'
             f';{ANSIFormatter.B24_COLOR if b24 else ANSIFormatter.B8_COLOR}'

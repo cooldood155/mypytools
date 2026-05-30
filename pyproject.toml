@@ -32,13 +32,6 @@ dev = [
 ]
 
 
-#——{ C++ Extensions }——————————————————————————————————————————————————————————
-[[tool.setuptools.ext-modules]]
-name = "mypytools.flattener._list"
-sources = ["src/mypytools/flattener/_list.cpp"]
-pybind11 = true
-
-
 #——{ Setuptools-Package(s) }———————————————————————————————————————————————————
 
 [tool.setuptools]

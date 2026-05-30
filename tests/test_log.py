@@ -1,4 +1,4 @@
-"""Tests for the ``src/mytools/flattener/`` package."""
+"""Tests for the ``src/mytools/log/`` package."""
 
 # Standard library imports
 from importlib import import_module
@@ -28,9 +28,8 @@ def fresh_imports():
     """
     # Define import targets
     module_names = [
-        'mypytools.flattener',
-        'mypytools.flattener._list',
-        'mypytools.flattener.list',
+        'mypytools.log',
+        'mypytools.log.log',
     ]
 
     # Perform dynamic imports
@@ -53,24 +52,17 @@ def fresh_imports():
 # ——{ Imports }————————————————————————————————————————————————————————————————
 
 
-def test_flattener_functions_exist(fresh_imports):
+def test_log_functions_exist(fresh_imports):
     """Test that the expected functions exist inside the modules."""
-    _list_mod = fresh_imports['mypytools.flattener._list']
-    list_mod = fresh_imports['mypytools.flattener.list']
+    log_mod = fresh_imports['mypytools.log.log']
 
-    assert hasattr(_list_mod, 'to_list')
-    assert hasattr(list_mod, 'filter_none')
+    assert hasattr(log_mod, 'get_logger')
+    assert hasattr(log_mod, 'setup_hooks')
 
 
 def test_package_level_exposure(fresh_imports):
     """Test that the top-level __init__ exposes the sub-tools."""
-    flattener = fresh_imports['mypytools.flattener']
+    log = fresh_imports['mypytools.log']
 
-    assert hasattr(flattener, 'to_list')
-    assert hasattr(flattener, 'filter_none')
-
-
-# ——{ Imports }————————————————————————————————————————————————————————————————
-
-
-mypytools.to_list()
+    assert hasattr(log, 'get_logger')
+    assert hasattr(log, 'setup_hooks')

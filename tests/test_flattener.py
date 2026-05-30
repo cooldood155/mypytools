@@ -48,3 +48,26 @@ def fresh_imports():
     for name in module_names:
         if name in modules:
             del modules[name]
+
+
+# ——{ Imports }————————————————————————————————————————————————————————————————
+
+
+def test_flattener_functions_exist(fresh_imports):
+    """Test that the expected functions exist inside the modules."""
+    _list_mod = fresh_imports['mypytools.flattener._list']
+    list_mod = fresh_imports['mypytools.flattener.list']
+
+    assert hasattr(_list_mod, 'to_list')
+    assert hasattr(list_mod, 'filter_none')
+
+
+def test_package_level_exposure(fresh_imports):
+    """Test that the top-level __init__ exposes the sub-tools."""
+    flattener = fresh_imports['mypytools.flattener']
+
+    assert hasattr(flattener, 'to_list')
+    assert hasattr(flattener, 'filter_none')
+
+
+

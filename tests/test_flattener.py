@@ -30,7 +30,7 @@ def fresh_imports():
     module_names = [
         'mypytools.flattener',
         'mypytools.flattener._list',
-        'mypytools.flattener.list',
+        'mypytools.flattener.list_filter',
     ]
 
     # Perform dynamic imports
@@ -56,7 +56,7 @@ def fresh_imports():
 def test_flattener_functions_exist(fresh_imports):
     """Test that the expected functions exist inside the modules."""
     _list_mod = fresh_imports['mypytools.flattener._list']
-    list_mod = fresh_imports['mypytools.flattener.list']
+    list_mod = fresh_imports['mypytools.flattener.list_filter']
 
     assert hasattr(_list_mod, 'to_list')
     assert hasattr(list_mod, 'filter_none')

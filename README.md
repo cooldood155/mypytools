@@ -12,9 +12,13 @@ There is a single requirement for installing/grabbing and using my tools:
 
 ## Installation
 
+- ***May not be accurate in its current state***
+
    [INSTALL](./docs/INSTALL.md) — guides you through installing the library and optional dependencies; explains how to grab specific modules/packages and import them directly into your project.
 
 ## Development
+
+- ***May not be accurate in its current state***
 
   [DEV](./docs/DEV.md) — guides you through cloning the repository, installing all of the required development dpendencies, and explains day-to-day development.
 

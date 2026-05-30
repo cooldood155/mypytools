@@ -11,9 +11,7 @@ Python documentation).
 
 ## Partial *Install*
 
-If you chose to grab specific subpackages or modules from the library
-yourself, the import statements in the above documentation may not
-perfectly represent the import statement you should use.
+If you chose to grab specific subpackages or modules from the library yourself the import statements in the documentation below may not perfectly represent the import statement you should use.
 
 For example, if you grab the two modules from `mypytools > ansi_tools`
 independently and not the entire package, the import statements

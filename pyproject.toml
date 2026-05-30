@@ -60,10 +60,10 @@ explicit_package_bases = true
 
 [tool.ruff]
 line-length = 80
-target-version = "py311" # <-- Tells pyupgrade which version of Python features it can force
+target-version = "py311"
 
-extend-exclude = ["tests"]
-force-exclude = true
+# extend-exclude = ["tests"]
+# force-exclude = true
 
 #——{ Formatting }——————————————————————
 [tool.ruff.format]

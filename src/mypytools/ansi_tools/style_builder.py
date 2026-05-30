@@ -78,10 +78,10 @@ def bubble(
     light_on_dark = code(light_fg, dark_bg)
     pink_italic = code(italic, fg(248, 175, 195), dark_bg)
     muted = code(fg(148, 163, 184), dark_bg)
+
     underlit = code(italic, underline, light_on_dark)
 
     pill_fg = fg(55, 65, 81)
-
     l_cap = style(pill_fg, '\ue0b6')
     r_cap = style(pill_fg, '\ue0b4')
 
@@ -110,8 +110,8 @@ def bubble(
     return (
         f'Expected {exp}'
         f' @—> {pill(pink_italic, at)}'
-        f' ?—>{prepend_why} {comparison_pill()}'
-        f'{append_why}'
+        f' ?—>{f" {prepend_why} " if prepend_why else " "}{comparison_pill()}'
+        f'{f" {append_why}" if append_why else ""}'
     )
 
 
@@ -161,7 +161,7 @@ class StyleBuilder:
         self,
         *raw_text: str,
         sep: str = '',
-        end_sep: str = ' ',
+        end_sep: str = 'DEFAULT',
         finish: Literal[False] = False,
         processed_sep: str = '',
         processed_sep_end: bool = False,
@@ -173,7 +173,7 @@ class StyleBuilder:
         self,
         *raw_text: str,
         sep: str = '',
-        end_sep: str = ' ',
+        end_sep: str = 'DEFAULT',
         finish: Literal[True],
         processed_sep: str = '',
         processed_sep_end: bool = False,
@@ -184,7 +184,7 @@ class StyleBuilder:
         self,
         *raw_text: str,
         sep: str = '',
-        end_sep: str = ' ',
+        end_sep: str = 'DEFAULT',
         finish: bool = False,
         processed_sep: str = '',
         processed_sep_end: bool = False,
@@ -200,7 +200,10 @@ class StyleBuilder:
                 The string used to join each str entry of ``raw_text``.
             end_sep (str):
                 The string appended to the resulting ``sep`` joined
-                ``raw_text`` string.
+                ``raw_text`` entries.
+
+                If not provided *and* ``finish`` is set to ``True``,
+                ``end_sep`` is set to ``''``.
             finish (bool):
                 If True (*False* by default), all of the cached style strings
                 are joined using the ``processed_sep`` string and returned.
@@ -228,7 +231,14 @@ class StyleBuilder:
                 'text was intended.'
             )
 
-        self._formatted.append(sep.join(raw_text) + end_sep)
+        joined_text = sep.join(raw_text)
+
+        if end_sep == 'DEFAULT':
+            actual_end = '' if finish else ' '
+        else:
+            actual_end = end_sep
+
+        self._formatted.append(joined_text + actual_end)
 
         if finish:
             result = processed_sep.join(self._formatted) + (
@@ -440,6 +450,17 @@ class StyleBuilder:
                 )
             )
 
+        if (isinstance(g, int) or isinstance(b, int)) and not b24:
+            sb = StyleBuilder()
+            raise ValueError(
+                sb.fg(235, 110, 30)
+                .apply('ValueError: ')
+                .add(
+                    'g or b arg of fg() was added — b24 argument is False',
+                    finish=True,
+                )
+            )
+
         self._codes.append(
             f'{ANSIFormatter.Foreground.CUSTOM.value}'
             f';{ANSIFormatter.B24_COLOR if b24 else ANSIFormatter.B8_COLOR}'
@@ -471,6 +492,17 @@ class StyleBuilder:
                     lvalue='b24',
                     rvalue='True',
                     prepend_why=' keyword-argument',
+                )
+            )
+
+        if (isinstance(g, int) or isinstance(b, int)) and not b24:
+            sb = StyleBuilder()
+            raise ValueError(
+                sb.fg(235, 110, 30)
+                .apply('ValueError: ')
+                .add(
+                    'g or b arg of fg() was added — b24 argument is False',
+                    finish=True,
                 )
             )
 

@@ -74,9 +74,6 @@ explicit_package_bases = true
 line-length = 80
 target-version = "py311"
 
-# extend-exclude = ["tests"]
-# force-exclude = true
-
 #——{ Formatting }——————————————————————
 [tool.ruff.format]
 quote-style = "single"

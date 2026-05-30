@@ -1,8 +1,8 @@
-# Working On MyLib
+# Working On MyPyTools
 
 **Authors**: Evan Reumann
 
-**Maintainers**: Evan Reuamnn
+**Maintainers**: Evan Reumann
 
 ## First time setup
 
@@ -13,9 +13,23 @@ git clone https://github.com/cooldood155/mypytools
 cd mypytools
 ```
 
-Then run `scripts/dev_deps.py` to install or update the required dependencies, not available through pip (e.g. git, GitHub.CLI).
+### C++ Compiler
+
+This project includes C++ extension modules built with pybind11. A
+C++ compiler must be installed before running `pip install`:
+
+- **Windows** — MSVC via
+  [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+  — select the **"Desktop development with C++"** workload
+- **macOS** — Clang via Xcode Command Line Tools:
+  `xcode-select --install`
+- **Linux** — GCC via your package manager:
+  `sudo apt install build-essential`
 
 ### Windows / macOS / Linux
+
+Then run `scripts/dev_deps.py` to install or update the required
+dependencies not available through pip (e.g. git, GitHub CLI).
 
 ```bash
 python3 scripts/dev_deps.py
@@ -23,38 +37,51 @@ python3 scripts/dev_deps.py
 
 - Optionally, install the dependencies manually:
 
-  #### git `>=2.54.0` — [installing](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+  - **git** `>=2.54.0` — [installing](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+  - **github.CLI** (*gh*) `>=2.92.0` — [installing](https://github.com/cli/cli#installation)
 
-  #### github.CLI (*gh*) `>=2.92.0` — [installing](https://github.com/cli/cli#installation)
-
-Install the library along with the dev dependencies, and hook up the git commit hooks.
+Install the library along with the dev dependencies, and hook up the
+git commit hooks.
 
 ```bash
-pip install -e ".[dev]"   # installs mypytools + dev tools (ruff, pytest, mypy)
-pre-commit install        # hooks up git commit hooks
+pip install -e ".[dev]" --no-build-isolation  # installs mypytools + dev tools (ruff, pytest, mypy)
+pre-commit install                             # hooks up git commit hooks
 ```
 
-The `-e` flag installs in **editable mode** — changes you make in `src/` are
-immediately reflected without reinstalling.
+The `-e` flag installs in **editable mode** — changes you make in
+`src/` are immediately reflected without reinstalling.
 
-You can omit this flag if necessary, manually updating by re-running `pip install ".[dev]"`.
+The `--no-build-isolation` flag is required because the project
+includes C++ extension modules built with pybind11, which must be
+present in the environment at build time.
+
+You can omit the `-e` flag if necessary, manually updating by
+re-running `pip install ".[dev]" --no-build-isolation`.
 
 ## Day-to-day
 
 - All **test modules** are written within the `tests/` directory
 
   - Each test module name starts with `test_` (e.g. `test_ansi_tools.py`)
-  - Each test function/method begins with the `test_` prefix (e.g. `test_reset_intensity(self): ...`)
-  - Each test class begins with the `Test` prefix (e.g. `TestANSIFormatterESCAPE`)
+  - Each test function/method begins with the `test_` prefix
+    (e.g. `test_reset_intensity(self): ...`)
+  - Each test class begins with the `Test` prefix
+    (e.g. `TestANSIFormatterESCAPE`)
 
-- All **Python modules** are written within `src/mypytools/` or any of its parent directories
+- All **Python modules** are written within `src/mypytools/` or any
+  of its subdirectories
 
-  - Follows the *src layout* convention; packages are initialized using an `__init__.py` initializer file
+  - Follows the *src layout* convention; packages are initialized
+    using an `__init__.py` initializer file
 
-- All **C extension modules** are written within a `.../c_modules/` directory
+- All **C++ extension modules** are written within their parent
+  package directory alongside their Python siblings
 
-  - Each module name begins with `_c_` (e.g. `_c_to_list`)
-  - Functions, methods, classes, and variables follow the Python conventions
+  - Each module name begins with `_` (e.g. `_list.cpp`)
+  - Compiled via pybind11; a corresponding `setup.py` at the project
+    root registers extensions with setuptools
+  - Functions, methods, classes, and variables follow Python
+    naming conventions
 
 - All **documentation** is written within the `docs/` directory
 
@@ -66,7 +93,7 @@ You can omit this flag if necessary, manually updating by re-running `pip instal
 
 - **Auto-fix** [ruff](#ruff) — **fail** on [mypy](#mypy)/[pytest](#pytest) errors
 
-  ```bash
+```bash
   #— Ruff ————————————————————————————————————
   ruff check --fix src/mypytools/  # lint (auto fix)
   ruff format src/mypytools/       # format (auto fix)
@@ -78,17 +105,18 @@ You can omit this flag if necessary, manually updating by re-running `pip instal
   pytest -x                # stop on first failure
   pytest -k "test_<name>"  # run a specific test
   pytest                   # run all tests
-  ```
+```
 
-  The path you pass to the commands does not have to be `src/mypytools/`.
-
-  Instead, it is *highly* recommended to explicitly target the files or package directories you want to evaluate. This avoids the large overhead of running these commands across the entire library.
+  The path you pass to the commands does not have to be
+  `src/mypytools/`. It is *highly* recommended to explicitly target
+  the files or package directories you want to evaluate — this avoids
+  the overhead of running these commands across the entire library.
 
 ### Pre-commit hook
 
 - **Auto-fix** [isort](#isort)/[ruff](#ruff) — **fail** on [mypy](#mypy)/[pytest](#pytest) errors
 
-  ```bash
+```bash
   #— isort ———————————————————————————————————
   isort src/mypytools/  # sort imports (auto fix)
 
@@ -101,13 +129,13 @@ You can omit this flag if necessary, manually updating by re-running `pip instal
 
   #— Pytest ——————————————————————————————————
   pytest -x  # stop on first failure
-  ```
+```
 
 ### CI
 
 - **Fail** on [isort](#isort)/[ruff](#ruff)/[mypy](#mypy)/[pytest](#pytest) errors
 
-  ```bash
+```bash
   #— isort ———————————————————————————————————
   isort src/mypytools/ --check-only --diff  # check imports
 
@@ -125,65 +153,61 @@ You can omit this flag if necessary, manually updating by re-running `pip instal
   git add .
   git commit -m "..."  # pre-commit hooks fire (isort + ruff + mypy + pytest)
   gh pr create         # CI takes over (isort + ruff + mypy + pytest)
-  ```
+```
 
 ---
 
 ### Isort
 
-1. **Import Sorting**
+1. **Import Sorting** — Checks import statements for sorting and formatting errors, catching issues at build time.
 
-    ```bash
-    isort src/mypytools/ --check-only --diff
-    ```
+```bash
+isort src/mypytools/ --check-only --diff
+```
 
-    Looks at import statements for sorting and formatting errors, catching errors at build time.
-
-    - **Manual**:
-
-        Just run `isort <path> --check-only --diff`, imports will be auto-sortted by isort.
+- **Manual**: Run `isort <path>` to auto-sort imports in place.
 
 ---
-
+<!-- markdownlint-disable MD029 -->
 ### Ruff
 
-1. **Linting**
+1. **Linting** — Searches through the code for logical errors, bugs, code smells, and security risks, catching functional mistakes at build time.
 
-    ```bash
-    ruff check src/mypytools/
-    ```
+```bash
+ruff check src/mypytools/
+```
 
-    Searches through the code for logical errors, bugs, code smells, and security risks, catching functional mistakes at build time.
+- **Manual**: Review everything [Ruff](https://docs.astral.sh/ruff/)
+  has flagged, fix what's needed, then re-run *with* `--fix` once
+  you're happy with what it'll change.
 
-    - **Manual**:
+2. **Formatting** — Enforces style guidelines; applies [PEP 8](https://peps.python.org/pep-0008/) and Black-compatible [formatting rules](https://docs.astral.sh/ruff/rules/), such as consistent spacing, line lengths, and quote usage.
 
-        Review everything [Ruff](https://docs.astral.sh/ruff/) has flagged, fix what's needed, then re-run *with* `--fix` once you're happy with what it'll change.
+```bash
+ruff format --check src/mypytools/
+```
 
-2. **Formatting**
-
-    ```bash
-    ruff format --check src/mypytools/
-    ```
-
-    Enforces style guidlines; applies [PEP 8](https://peps.python.org/pep-0008/) and Black-compatible [formatting rules](https://docs.astral.sh/ruff/rules/), such as consisten spacing, line-lengths, and quote usage.
-
-    - **Manual**:
-
-        Review everything Ruff has flagged fix what's needed, then re-run *without* the `--check` flag once you're happy with what it'll change.
+- **Manual**: Review everything Ruff has flagged, fix what's needed,
+  then re-run *without* the `--check` flag once you're happy with
+  what it'll change.
 
 ---
+<!-- markdownlint-enable MD029 -->
 
 ### MyPy
 
 - **Type Checking**
 
-  ```bash
-  mypy src/mypytools/ --strict
-  ```
+```bash
+mypy src/mypytools/ --strict
+```
 
-  Type checks the passed in packages/modules that have type annotations conforming to [PEP 484](https://www.python.org/dev/peps/pep-0484/).
+  Type checks the passed packages/modules against type annotations
+  conforming to [PEP 484](https://www.python.org/dev/peps/pep-0484/).
 
-  The `--strict` flag is appended every time — a type related error will rarely appear at runtime without a corresponding mypy error, unless you explicitly circumvent mypy somehow (i.e., using a pragma: ``# type: ignore``).
+  The `--strict` flag is always appended — a type-related error will
+  rarely appear at runtime without a corresponding mypy error, unless
+  you explicitly circumvent mypy (e.g. `# type: ignore`).
 
 ---
 
@@ -191,38 +215,48 @@ You can omit this flag if necessary, manually updating by re-running `pip instal
 
 - **Run Tests**
 
-  ```bash
-  pytest -x # Fail/Exit on first test fail
-  ```
+```bash
+pytest -x  # fail/exit on first test failure
+```
 
-  Runs all of tests prefixed with `test_` within the root `tests/` directory inside of modules prefixed with `test_` (i.e., the `test_custom_compare()` method within the `tests/test_ansi_tools.py` module).
+  Runs all tests prefixed with `test_` within the root `tests/`
+  directory, inside modules prefixed with `test_` (e.g.
+  `test_custom_compare()` within `tests/test_ansi_tools.py`).
 
-  - The `-x` flag causes pytest to exit on the first failed test. If you would prefer to run all tests to check everything that is failing, run *`pytest`* directly
+  The `-x` flag causes pytest to exit on the first failed test. To
+  run all tests regardless of failures, run `pytest` directly.
 
-  You can also run a specific tests using `pytest -k "test_<name>"`. This can be usefull if you catch a failing test, attempt to resolve the issue, and want to run that specific test again to check if you succeeded.
+  Run a specific test with `pytest -k "test_<name>"` — useful when
+  you've fixed a failing test and want to verify just that case.
 
 ## Release
 
 ### GitHub
 
 1. Go to **Actions → Bump Version → Run workflow**
-2. Enter the new version (e.g. `0.3.0`)
-3. Click **Run** — this bumps `pyproject.toml`, tags the commit, and triggers the release CI
+2. Enter the new version (e.g. `0.1.0a2`)
+3. Click **Run** — this bumps `pyproject.toml`, tags the commit, and
+   triggers the release CI
 
-### GitHub.CLI
+### GitHub CLI
 
-``gh workflow run bump.yml --field version=0.3.0``
+```bash
+gh workflow run bump.yml --field version=0.1.0a2
+```
 
-- You can also watch it run live by running ``gh run watch`` after running the bump workflow via the command above and choosing the most recently ran workflow
-  - This is optional and only needed if you want to monitor progress
+Optionally watch it run live:
+
+```bash
+gh run watch  # choose the most recently triggered workflow
+```
 
 ---
 
 ### Workflow
 
-1. triggered (via [GitHub](#github) or [GitHub.CLI](#githubcli))
-2. bumps pyproject.toml
-3. commits
-4. tags
-5. pushes
-6. release.yml fires
+1. Triggered (via [GitHub](#github) or [GitHub CLI](#github-cli))
+2. Bumps `pyproject.toml`
+3. Commits
+4. Tags
+5. Pushes
+6. `release.yml` fires

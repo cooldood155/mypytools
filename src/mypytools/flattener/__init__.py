@@ -94,8 +94,11 @@ def to_list(
         ValueError: If ``unwrap_layers`` is less than ``-1`` or
             equal to ``0``.
 
-    Added: `v0.1.0a1`
-    Updated: `v0.2.0a1
+    ---
+
+    *Added*: `v0.1.0a1`
+
+    *Updated*: `v0.1.0a2`
     """
     return _to_list(
         *entries,

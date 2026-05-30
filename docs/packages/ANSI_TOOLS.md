@@ -1,6 +1,10 @@
 # Ansi Tools Package
 
-The packages initializer file ([``__init__.py``](../../src/mypytools/ansi_tools/__init__.py)), the modules, and the functions/methods/classes/etc. themselves have great documentation that explains in detail the functinalities of everything and (in the case of modules and packages) everything that is publically exposed.
+The package's initializer file ([``__init__.py``](../../src/mypytools/ansi_tools/__init__.py)),
+the modules, and the functions/methods/classes/etc. themselves have
+great documentation that explains in detail the functionalities of
+everything and (in the case of modules and packages) everything that
+is publicly exposed.
 
 ## Provided Modules
 
@@ -11,7 +15,7 @@ The packages initializer file ([``__init__.py``](../../src/mypytools/ansi_tools/
 
 ### ``formatter``
 
-- A low-level ANSI terminal formatting utility
+A low-level ANSI terminal formatting utility.
 
 #### *formatter > ANSIFormatter*
 
@@ -21,33 +25,33 @@ class ANSIFormatter: ...
 
 Low-level ANSI escape-sequence constants and builder.
 
-Typical usage is through ``StyleBuilder``, which wraps these constants in
-a fluent API.
+Typical usage is through ``StyleBuilder``, which wraps these constants
+in a fluent API.
 
-### Contains
+**Contains**:
 
 - ``escape`` — classmethod that wraps a string in an SGR escape sequence.
 
-  ``` Python
+```python
   @classmethod
-      def escape(
-          cls,
-          style: str | int,
-          string: str,
-          *,
-          reset: str = ''
-      ) -> str: ...
-  ```
+  def escape(
+      cls,
+      style: str | int,
+      string: str,
+      *,
+      reset: str = '',
+  ) -> str: ...
+```
 
-  Direct use of ``escape`` is useful when you need a one-off
-styled string without building up a chain.
+  Direct use of ``escape`` is useful when you need a one-off styled
+  string without building up a chain.
 
 - ``Fonts``, ``Emphasis``, ``Effects``, ``Foreground``, ``Background`` —
-nested namespaces grouping related SGR codes.
+  nested namespaces grouping related SGR codes.
 
 ---
 
-### `style_builder`
+### ``style_builder``
 
 Fluent builder for composing and applying ANSI styles.
 
@@ -57,7 +61,7 @@ corresponding escape sequence.
 
 **For example**:
 
-```Python
+```python
 print(
     StyleBuilder()
     .bold()
@@ -71,15 +75,16 @@ print(
 )
 ```
 
-- Resulting in something similar to:
+Resulting in something similar to:
 
-  **Error:** *Something went wrong*
+**Error:** *something went wrong*
 
-  - ``'Error'`` would be red here, but markdown does not have built-in syntax for coloring text
+- ``'Error: '`` would be red here, but markdown does not have
+  built-in syntax for coloring text.
 
 ***or***:
 
-```Python
+```python
 print(
     StyleBuilder()
     .bold()
@@ -90,6 +95,6 @@ print(
 )
 ```
 
-- Resulting in something similar to:
+Resulting in something similar to:
 
-  **Look** ***here*** https&#8203;://github.com/cooldood155/mypytools
+**Look** ***here*** https&#8203;://github.com/cooldood155/mypytools

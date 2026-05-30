@@ -53,7 +53,7 @@ def fresh_imports():
 ESC = '\x1b['
 
 
-# ——{ Imports }—————————————————————————————————————————————————————————————————
+# ——{ Imports }————————————————————————————————————————————————————————————————
 
 
 def test_formatter_classes_exist(fresh_imports):
@@ -75,7 +75,7 @@ def test_package_level_exposure(fresh_imports):
     assert hasattr(ansi_tools, 'bubble')
 
 
-# ——{ mypytools.ANSIFormatter.escape }——————————————————————————————————————————
+# ——{ mypytools.ANSIFormatter.escape }—————————————————————————————————————————
 
 
 class TestANSIFormatterESCAPE:
@@ -127,7 +127,7 @@ class TestANSIFormatterESCAPE:
         assert result == f'{ESC}1;3mtext{ESC}0m'
 
 
-# ——{ mypytools.ANSIFormatter constants }———————————————————————————————————————
+# ——{ mypytools.ANSIFormatter constants }——————————————————————————————————————
 
 
 class TestANSIFormatterConstants:
@@ -150,7 +150,7 @@ class TestANSIFormatterConstants:
         assert mypytools.ANSIFormatter.B24_COLOR == 2
 
 
-# ——{ mypytools.ANSIFormatter.Emphasis }————————————————————————————————————————
+# ——{ mypytools.ANSIFormatter.Emphasis }———————————————————————————————————————
 
 
 class TestEmphasis:
@@ -199,7 +199,7 @@ class TestEmphasis:
         )
 
 
-# ——{ mypytools.ANSIFormatter.Effects }—————————————————————————————————————————
+# ——{ mypytools.ANSIFormatter.Effects }————————————————————————————————————————
 
 
 class TestEffects:
@@ -238,7 +238,7 @@ class TestEffects:
         assert mypytools.ANSIFormatter.Effects.reset['SHOW'] == 28
 
 
-# ——{ mypytools.ANSIFormatter.Foreground / Background }—————————————————————————
+# ——{ mypytools.ANSIFormatter.Foreground / Background }————————————————————————
 
 
 class TestForeground:
@@ -329,7 +329,7 @@ class TestBackground:
         assert mypytools.ANSIFormatter.Background.DEFAULT.value == 49
 
 
-# ——{ mypytools.StyleBuilder._compute_reset_codes }—————————————————————————————
+# ——{ mypytools.StyleBuilder._compute_reset_codes }————————————————————————————
 
 
 class TestComputeResetCodes:
@@ -339,13 +339,17 @@ class TestComputeResetCodes:
         """Test ``StyleBuilder._compute_reset_codes('1')`` gives ``22``."""
         codes = [str(mypytools.ANSIFormatter.Emphasis.BOLD)]
         result = mypytools.StyleBuilder._compute_reset_codes(codes)
-        assert str(mypytools.ANSIFormatter.RESET_INTENSITY) in result.split(';')
+        assert (
+            str(mypytools.ANSIFormatter.RESET_INTENSITY) in result.split(';')
+        )
 
     def test_dim_returns_reset_intensity(self):
         """Test ``StyleBuilder._compute_reset_codes('2')`` gives ``22``."""
         codes = [str(mypytools.ANSIFormatter.Effects.DIM)]
         result = mypytools.StyleBuilder._compute_reset_codes(codes)
-        assert str(mypytools.ANSIFormatter.RESET_INTENSITY) in result.split(';')
+        assert (
+            str(mypytools.ANSIFormatter.RESET_INTENSITY) in result.split(';')
+        )
 
     def test_italic_returns_reset_italic(self):
         """Test ``StyleBuilder._compute_reset_codes('3')`` gives ``23``."""
@@ -405,7 +409,9 @@ class TestComputeResetCodes:
 
     def test_custom_fg_returns_fg_default(self):
         """Test ``StyleBuilder._compute_reset_codes('38;2;255;0;0')``."""
-        codes = [f'{mypytools.ANSIFormatter.Foreground.CUSTOM.value};2;255;0;0']
+        codes = [
+            f'{mypytools.ANSIFormatter.Foreground.CUSTOM.value};2;255;0;0'
+        ]
         result = mypytools.StyleBuilder._compute_reset_codes(codes)
         assert str(
             mypytools.ANSIFormatter.Foreground.DEFAULT.value
@@ -413,7 +419,9 @@ class TestComputeResetCodes:
 
     def test_custom_bg_returns_bg_default(self):
         """Test ``StyleBuilder._compute_reset_codes('48;2;0;0;255')``."""
-        codes = [f'{mypytools.ANSIFormatter.Background.CUSTOM.value};2;0;0;255']
+        codes = [
+            f'{mypytools.ANSIFormatter.Background.CUSTOM.value};2;0;0;255'
+        ]
         result = mypytools.StyleBuilder._compute_reset_codes(codes)
         assert str(
             mypytools.ANSIFormatter.Background.DEFAULT.value
@@ -439,7 +447,7 @@ class TestComputeResetCodes:
         parts = result.split(';')
         assert str(mypytools.ANSIFormatter.RESET_INTENSITY) in parts
         assert (
-            str(mypytools.ANSIFormatter.Emphasis.reset['RESET_ITALIC']) in parts
+           str(mypytools.ANSIFormatter.Emphasis.reset['RESET_ITALIC']) in parts
         )
 
 
@@ -605,7 +613,7 @@ class TestStyleBuilderStyleMethods:
         assert result == f'{ESC}1;3mhello{ESC}22;23m'
 
 
-# ——{ mypytools.StyleBuilder.fg / bg }——————————————————————————————————————————
+# ——{ mypytools.StyleBuilder.fg / bg }—————————————————————————————————————————
 
 
 class TestStyleBuilderFgBg:
@@ -692,7 +700,7 @@ class TestStyleBuilderFgBg:
         assert sb.bg(0, 0, 0) is sb
 
 
-# ——{ mypytools.StyleBuilder.apply }————————————————————————————————————————————
+# ——{ mypytools.StyleBuilder.apply }———————————————————————————————————————————
 
 
 class TestStyleBuilderApply:
@@ -865,7 +873,7 @@ class TestStyleBuilderApply:
         assert result == f'{ESC}1mhello{ESC}22m\n{ESC}3mworld{ESC}23m'
 
 
-# ——{ mypytools.StyleBuilder.add }——————————————————————————————————————————————
+# ——{ mypytools.StyleBuilder.add }—————————————————————————————————————————————
 
 
 class TestStyleBuilderAdd:
@@ -904,7 +912,9 @@ class TestStyleBuilderAdd:
 
     def test_end_sep_appended(self):
         """Test `add`'s `end_sep` argument appended to `raw_text` entry."""
-        result = mypytools.StyleBuilder().add('hello', end_sep='!', finish=True)
+        result = mypytools.StyleBuilder().add(
+            'hello', end_sep='!', finish=True
+        )
         assert result == 'hello!'
 
     def test_add_and_apply_together(self):
@@ -918,7 +928,7 @@ class TestStyleBuilderAdd:
         assert result == f'{ESC}1mstyled {ESC}22mplain'
 
 
-# ——{ mypytools.bubble }————————————————————————————————————————————————————————
+# ——{ mypytools.bubble }———————————————————————————————————————————————————————
 
 
 class TestBubble:
@@ -1007,7 +1017,7 @@ class TestBubble:
             ) in result
 
     def test_prepend_why(self, default_args):
-        """Test ``bubble(..., prepend_why='keyword-argument')`` prepends str."""
+        """Test `bubble(..., prepend_why='keyword-argument')` prepends str."""
         default_args['prepend_why'] = 'keyword-argument'
         result = mypytools.bubble(**default_args)
         assert '?—> keyword-argument ' in result

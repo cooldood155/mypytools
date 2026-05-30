@@ -40,9 +40,9 @@ toolchain for your platform:
 - **Linux** — GCC via your package manager, e.g.
   `sudo apt install build-essential`
 
-### pybind11
+### pybind11 — build
 
-- #### Version *(pybind11)*
+- #### Version *(pybind11) — build*
 
   Required to compile the C++ extension modules. Any version greater
   than or equal to ``2.12``.
@@ -116,3 +116,10 @@ toolchain for your platform:
 
   Any version! This is a thin installer utility with a stable API that
   essentially never breaks.
+
+### pybind11
+
+- #### Version *(pybind11)*
+
+  Required to compile the C++ extension modules. Any version greater
+  than or equal to ``2.12``.

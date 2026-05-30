@@ -41,6 +41,8 @@ def filter_none(
     combine: Literal[False] = ...,
     replace: ET | None = ...,
 ) -> tuple[list[ET], ...]: ...
+
+
 @overload
 def filter_none(
     *flattened_lists: list[Any],
@@ -48,6 +50,8 @@ def filter_none(
     combine: Literal[False] = ...,
     replace: TC | None = ...,
 ) -> tuple[list[TC], ...]: ...
+
+
 @overload
 def filter_none(
     *flattened_lists: list[ET],
@@ -55,6 +59,8 @@ def filter_none(
     combine: Literal[True],
     replace: ET | None = ...,
 ) -> list[ET]: ...
+
+
 @overload
 def filter_none(
     *flattened_lists: list[Any],
@@ -62,6 +68,8 @@ def filter_none(
     combine: Literal[True],
     replace: TC | None = ...,
 ) -> list[TC]: ...
+
+
 def filter_none(
     *flattened_lists: list[Any],
     cast_to: type[TC] | None = None,

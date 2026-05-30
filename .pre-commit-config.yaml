@@ -1,25 +1,24 @@
 repos:
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-        files: ^src/mypytools/
-
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.11.8
     hooks:
       - id: ruff
-        files: ^src/mypytools/
+        # Fixes structural and styling rules across the whole project
+        args: [--fix]
       - id: ruff-format
-        files: ^src/mypytools/
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        # No 'files:' filter here, so it checks setup.py and scripts/ too!
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.10.0
     hooks:
       - id: mypy
-        files: ^src/mypytools/
+        files: ^src/mypytools/|^scripts/
         args: [--strict]
-        additional_dependencies: []
 
   - repo: local
     hooks:

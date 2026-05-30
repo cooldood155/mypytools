@@ -1,20 +1,25 @@
 # Flattener Package
 
-The packages initializer file ([``__init__.py``](../../src/mypytools/flattener/__init__.py)), the modules, and the functions/methods/classes/etc. themselves have great documentation that explains in detail the functinalities of everything and (in the case of modules and packages) everything that is publically exposed.
+The package's initializer file ([``__init__.py``](../../src/mypytools/flattener/__init__.py)),
+the modules, and the functions/methods/classes/etc. themselves have
+great documentation that explains in detail the functionalities of
+everything and (in the case of modules and packages) everything that
+is publicly exposed.
 
 ## Provided Modules
 
-- [list.py](../../src/mypytools/flattener/list.py) — [Documentation](#list)
+- [list_filter.py](../../src/mypytools/flattener/list_filter.py) — [documentation](#list_filter)
+- [\_list.cpp](../../src/mypytools/flattener/_list.cpp) — [documentation](#_list)
 
 ---
 
-### ``list``
+### ``list_filter``
 
-- Utilities for flattening and filtering heterogeneous lists.
+Utilities for filtering heterogeneous lists.
 
-#### *list > filter_none*
+#### *list_filter > filter_none*
 
-```Python
+```python
 @overload
 def filter_none(
     *flattened_lists: list[ET],
@@ -63,23 +68,32 @@ Remove or replace ``None`` values in one or more flat lists.
 
 *``flattened_lists`` — **tuple[list[Any], ...]***:
 
-- The list(s) of values to filter and remove None from
+- The list(s) of values to filter.
 
 *``cast_to`` — **type[TC] | None = None***:
 
-- If provided, the resulting list is casted to this type and returned
+- If provided, the resulting list is cast to this type before being
+  returned.
 
 *``combine`` — **bool = False***:
 
-- If True, all of the lists are combined before being returned
+- If ``True``, all lists are combined into a single list before
+  being returned.
 
 *``replace`` — **Any = None***:
 
-- If anything is provided here, it is used to replace every instance of None instead of removing it
+- If provided, replaces every ``None`` with this value instead of
+  removing it.
 
-#### *list > to_list*
+---
 
-```Python
+### ``_list``
+
+Fast list flattening utilities (C++ extension, compiled via pybind11).
+
+#### *_list > to_list*
+
+```python
 @overload
 def to_list(
     *entries: Any,
@@ -102,43 +116,46 @@ def to_list(
     preserve_dict_tuples: bool = True,
     cast_to: None = None,
 ) -> list[ET]: ...
-
-
-def to_list(
-    *entries: Any,
-    include_none: bool = False,
-    unwrap_layers: int = -1,
-    unwrap_dict_keys: bool = True,
-    unwrap_dict_vals: bool = False,
-    preserve_dict_tuples: bool = True,
-    cast_to: type[TC] | None = None,
-) -> list[Any]: ...
 ```
+
+Flatten a composite of iterables and scalars into a flat list.
+Strings are treated as scalar values and are never iterated.
 
 *``entries`` — **tuple[Any, ...]***:
 
-- The entries to unwrap combine and return as a list
+- Values to flatten. Each may be a scalar, a string, an iterable,
+  or a mapping.
 
 *``include_none`` — **bool = False***:
 
-- If True, ``None`` is included, otherwise it is removed
+- If ``True``, ``None`` is kept as a valid list value; otherwise it
+  is removed.
 
 *``unwrap_layers`` — **int = -1***:
 
-- The number of layers to unwrap from the iterables passed into ``entries``, if ``-1`` is passed in then the iterables are completely flattened
+- Depth limit for unwrapping nested iterables. ``-1`` unwraps fully;
+  positive integers stop at that depth.
 
 *``unwrap_dict_keys`` — **bool = True***:
 
-- If True, keys from dictionaries passed into ``entries`` are unwrapped from the dictionary and added to the list as a literal
+- If ``True``, dictionary keys are unwrapped and added to the list.
 
 *``unwrap_dict_vals`` — **bool = False***:
 
-- If True, values from dictionaries passed into ``entries`` are unwrapped from the dictionary and added to the list as a literal
+- If ``True``, dictionary values are unwrapped and added to the list.
 
 *``preserve_dict_tuples`` — **bool = True***:
 
-- If True, keys and values from dictionaries passed into ``entries`` are unwrapped from the dictionary and added to the list as tuples of ``(Key, Value)`` pairs
+- When both ``unwrap_dict_keys`` and ``unwrap_dict_vals`` are
+  ``True``, keeps each key-value pair as an intact ``(key, value)``
+  tuple.
 
 *``cast_to`` — **type[TC] | None = None***:
 
-- If provided, the flattened list is casted to this type before being returned
+- Static-analysis convenience only; no runtime conversion of
+  individual items is performed.
+
+**Raises**:
+
+- ``ValueError`` — if ``unwrap_layers`` is less than ``-1`` or
+  equal to ``0``.

@@ -339,17 +339,13 @@ class TestComputeResetCodes:
         """Test ``StyleBuilder._compute_reset_codes('1')`` gives ``22``."""
         codes = [str(mypytools.ANSIFormatter.Emphasis.BOLD)]
         result = mypytools.StyleBuilder._compute_reset_codes(codes)
-        assert (
-            str(mypytools.ANSIFormatter.RESET_INTENSITY) in result.split(';')
-        )
+        assert str(mypytools.ANSIFormatter.RESET_INTENSITY) in result.split(';')
 
     def test_dim_returns_reset_intensity(self):
         """Test ``StyleBuilder._compute_reset_codes('2')`` gives ``22``."""
         codes = [str(mypytools.ANSIFormatter.Effects.DIM)]
         result = mypytools.StyleBuilder._compute_reset_codes(codes)
-        assert (
-            str(mypytools.ANSIFormatter.RESET_INTENSITY) in result.split(';')
-        )
+        assert str(mypytools.ANSIFormatter.RESET_INTENSITY) in result.split(';')
 
     def test_italic_returns_reset_italic(self):
         """Test ``StyleBuilder._compute_reset_codes('3')`` gives ``23``."""
@@ -409,9 +405,7 @@ class TestComputeResetCodes:
 
     def test_custom_fg_returns_fg_default(self):
         """Test ``StyleBuilder._compute_reset_codes('38;2;255;0;0')``."""
-        codes = [
-            f'{mypytools.ANSIFormatter.Foreground.CUSTOM.value};2;255;0;0'
-        ]
+        codes = [f'{mypytools.ANSIFormatter.Foreground.CUSTOM.value};2;255;0;0']
         result = mypytools.StyleBuilder._compute_reset_codes(codes)
         assert str(
             mypytools.ANSIFormatter.Foreground.DEFAULT.value
@@ -419,9 +413,7 @@ class TestComputeResetCodes:
 
     def test_custom_bg_returns_bg_default(self):
         """Test ``StyleBuilder._compute_reset_codes('48;2;0;0;255')``."""
-        codes = [
-            f'{mypytools.ANSIFormatter.Background.CUSTOM.value};2;0;0;255'
-        ]
+        codes = [f'{mypytools.ANSIFormatter.Background.CUSTOM.value};2;0;0;255']
         result = mypytools.StyleBuilder._compute_reset_codes(codes)
         assert str(
             mypytools.ANSIFormatter.Background.DEFAULT.value
@@ -447,7 +439,7 @@ class TestComputeResetCodes:
         parts = result.split(';')
         assert str(mypytools.ANSIFormatter.RESET_INTENSITY) in parts
         assert (
-           str(mypytools.ANSIFormatter.Emphasis.reset['RESET_ITALIC']) in parts
+            str(mypytools.ANSIFormatter.Emphasis.reset['RESET_ITALIC']) in parts
         )
 
 
@@ -912,9 +904,7 @@ class TestStyleBuilderAdd:
 
     def test_end_sep_appended(self):
         """Test `add`'s `end_sep` argument appended to `raw_text` entry."""
-        result = mypytools.StyleBuilder().add(
-            'hello', end_sep='!', finish=True
-        )
+        result = mypytools.StyleBuilder().add('hello', end_sep='!', finish=True)
         assert result == 'hello!'
 
     def test_add_and_apply_together(self):

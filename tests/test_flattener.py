@@ -5,7 +5,7 @@ from importlib import import_module
 from sys import stderr, exit as sysexit, modules
 
 # Third party imports
-from pytest import raises, fixture, fail
+from pytest import fixture, fail
 
 try:
     # Project imports

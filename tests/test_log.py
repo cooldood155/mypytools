@@ -5,7 +5,7 @@ from importlib import import_module
 from sys import stderr, exit as sysexit, modules
 
 # Third party imports
-from pytest import raises, fixture, fail
+from pytest import fixture, fail
 
 try:
     # Project imports
@@ -66,3 +66,7 @@ def test_package_level_exposure(fresh_imports):
 
     assert hasattr(log, 'get_logger')
     assert hasattr(log, 'setup_hooks')
+
+
+# Use mypytools module import to avoid ruff error, will add tests soon
+mytools = mypytools

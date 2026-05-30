@@ -29,11 +29,12 @@ import subprocess
 import sys
 
 GIT_MIN = '2.54.0'
-GH_MIN  = '2.92.0'
+GH_MIN = '2.92.0'
 CXX_STANDARD = 17
 
 
 # ——{ Helpers }————————————————————————————————————————————————————————————————
+
 
 def run_command(command: str) -> None:
     """
@@ -107,11 +108,13 @@ def apt_available() -> bool:
     return (
         subprocess.run(
             'type apt-get', shell=True, capture_output=True
-        ).returncode == 0
+        ).returncode
+        == 0
     )
 
 
 # ——{ Compiler }———————————————————————————————————————————————————————————————
+
 
 def _compiler_supports_cxx17(executable: str) -> bool:
     """
@@ -150,8 +153,8 @@ def _find_cxx17_compiler(os_type: str) -> str | None:
     """
     candidates: dict[str, list[str]] = {
         'Windows': ['cl'],
-        'Darwin':  ['clang++', 'g++'],
-        'Linux':   ['g++', 'clang++'],
+        'Darwin': ['clang++', 'g++'],
+        'Linux': ['g++', 'clang++'],
     }
     for compiler in candidates.get(os_type, ['g++', 'clang++']):
         if _compiler_supports_cxx17(compiler):
@@ -210,11 +213,14 @@ def check_compiler(os_type: str) -> None:
             print('Installing gcc-c++ via dnf...')
             run_command('sudo dnf install gcc-c++ -y')
         if not _find_cxx17_compiler(os_type):
-            print('Compiler installation succeeded but no C++17 compiler found.')
+            print(
+                'Compiler installation succeeded but no C++17 compiler found.'
+            )
             sys.exit(1)
 
 
 # ——{ Dependencies }———————————————————————————————————————————————————————————
+
 
 def _install_dep(
     command: str,
@@ -275,6 +281,7 @@ def _apt_install(package: str) -> None:
 
 # ——{ Main }———————————————————————————————————————————————————————————————————
 
+
 def main() -> None:
     """Installs/updates all of the required dependencies for your system."""
     os_type = platform.system()
@@ -284,24 +291,28 @@ def main() -> None:
 
     if os_type == 'Windows':
         _install_dep(
-            'git', GIT_MIN,
+            'git',
+            GIT_MIN,
             install_cmd='winget install --id Git.Git --exact',
             upgrade_cmd='winget upgrade --id Git.Git --exact',
         )
         _install_dep(
-            'gh', GH_MIN,
+            'gh',
+            GH_MIN,
             install_cmd='winget install --id GitHub.CLI --exact',
             upgrade_cmd='winget upgrade --id GitHub.CLI --exact',
         )
 
     elif os_type == 'Darwin':
         _install_dep(
-            'git', GIT_MIN,
+            'git',
+            GIT_MIN,
             install_cmd='brew install git',
             upgrade_cmd='brew upgrade git',
         )
         _install_dep(
-            'gh', GH_MIN,
+            'gh',
+            GH_MIN,
             install_cmd='brew install gh',
             upgrade_cmd='brew upgrade gh',
         )
@@ -310,9 +321,14 @@ def main() -> None:
         if apt_available():
             print('Detected Debian/Ubuntu system.')
             _install_dep(
-                'git', GIT_MIN,
-                install_cmd='sudo apt-get update && sudo apt-get install -y git',
-                upgrade_cmd='sudo apt-get update && sudo apt-get install -y git',
+                'git',
+                GIT_MIN,
+                install_cmd=(
+                    'sudo apt-get update && sudo apt-get install -y git'
+                ),
+                upgrade_cmd=(
+                    'sudo apt-get update && sudo apt-get install -y git'
+                ),
             )
             if not meets_min_version('gh', GH_MIN):
                 _apt_install('gh')

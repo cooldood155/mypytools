@@ -41,6 +41,8 @@ def to_list(
     preserve_dict_tuples: bool = ...,
     cast_to: type[TC],
 ) -> list[TC]: ...
+
+
 @overload
 def to_list(
     *entries: ET,
@@ -51,6 +53,8 @@ def to_list(
     preserve_dict_tuples: bool = ...,
     cast_to: None = ...,
 ) -> list[ET]: ...
+
+
 def to_list(
     *entries: Any,
     include_none: bool = False,
